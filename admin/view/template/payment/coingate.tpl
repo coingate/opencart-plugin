@@ -205,6 +205,10 @@
                             <input type="text" name="coingate_sort_order" value="<?php echo $coingate_sort_order; ?>" class="form-control"/>
                         </div>
                     </div>
+
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <i>Extension not working? <a href="http://support.coingate.com/knowledge_base/topics/plugin-slash-extension-slash-module-not-working-common-issues" target="_blank">See most common plugin issues.</a></i>
+                    </div>
                 </form>
             </div>
         </div>
