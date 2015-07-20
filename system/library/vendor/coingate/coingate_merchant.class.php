@@ -9,10 +9,10 @@ class CoingateMerchant
     private $version = 'v1';
     private $api_url = '';
 
-    public function __construct($options = [])
+    public function __construct($options = array())
     {
         foreach ($options as $key => $value) {
-            if (in_array($key, ['app_id', 'api_key', 'api_secret', 'mode'])) {
+            if (in_array($key, array('app_id', 'api_key', 'api_secret', 'mode'))) {
                 $this->$key = trim($value);
             }
         }
@@ -20,7 +20,7 @@ class CoingateMerchant
         $this->set_api_url();
     }
 
-    public function create_order($params = [])
+    public function create_order($params = array())
     {
         $this->request('/orders', 'POST', $params);
     }
@@ -30,29 +30,29 @@ class CoingateMerchant
         $this->request('/orders/' . $order_id);
     }
 
-    public function request($url, $method = 'GET', $params = [])
+    public function request($url, $method = 'GET', $params = array())
     {
         $url = $this->api_url . $url;
         $nonce = $this->nonce();
         $message = $nonce . $this->app_id . $this->api_key;
         $signature = hash_hmac('sha256', $message, $this->api_secret);
 
-        $headers = [];
+        $headers = array();
         $headers[] = 'Access-Key: ' . $this->api_key;
         $headers[] = 'Access-Nonce: ' . $nonce;
         $headers[] = 'Access-Signature: ' . $signature;
 
         $curl = curl_init();
 
-        $curl_options = [
+        $curl_options = array(
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_URL            => $url
-        ];
+        );
 
         if ($method == 'POST') {
             $headers[] = 'Content-Type: application/x-www-form-urlencoded';
 
-            array_merge($curl_options, [CURLOPT_POST => 1]);
+            array_merge($curl_options, array(CURLOPT_POST => 1));
             curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($params));
         }
 
@@ -71,7 +71,7 @@ class CoingateMerchant
 
     private function nonce()
     {
-        return microtime(TRUE) * 10000;
+        return phpversion() >= 5 ? str_replace('.', '', ((string)microtime(TRUE))) : time();
     }
 
     private function set_api_url()
@@ -80,3 +80,5 @@ class CoingateMerchant
         $this->api_url .= $this->version;
     }
 }
+
+?>
