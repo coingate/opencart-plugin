@@ -34,16 +34,16 @@ class ControllerPaymentCoingate extends Controller
 
         $order = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
-        $coingate = new CoingateMerchant(['app_id' => $this->config->get('coingate_app_id'), 'api_key' => $this->config->get('coingate_api_key'), 'api_secret' => $this->config->get('coingate_api_secret'), 'mode' => $this->config->get('coingate_test') == 1 ? 'sandbox' : 'live']);
+        $coingate = new CoingateMerchant(array('app_id' => $this->config->get('coingate_app_id'), 'api_key' => $this->config->get('coingate_api_key'), 'api_secret' => $this->config->get('coingate_api_secret'), 'mode' => $this->config->get('coingate_test') == 1 ? 'sandbox' : 'live'));
 
         $token = $this->generate_token($order['order_id']);
 
-        $description = [];
+        $description = array();
         foreach ($this->cart->getProducts() as $product) {
             $description[] = $product['quantity'] . ' × ' . $product['name'];
         }
 
-        $coingate->create_order([
+        $coingate->create_order(array(
             'order_id'         => $order['order_id'],
             'price'            => number_format($order['total'], 2, '.', ''),
             'currency'         => $order['currency_code'],
@@ -53,7 +53,7 @@ class ControllerPaymentCoingate extends Controller
             'success_url'      => $this->url->link('payment/coingate/accept', '', $this->config->get('config_secure')),
             'title'            => $this->config->get('config_meta_title') . ' Order #' . $order['order_id'],
             'description'      => join($description, ', ')
-        ]);
+        ));
 
         if ($coingate->success) {
             $this->model_checkout_order->addOrderHistory($order['order_id'], $this->config->get('coingate_new_order_status_id'));
@@ -95,7 +95,7 @@ class ControllerPaymentCoingate extends Controller
             if ($token == '' || $_GET['cg_token'] != $token)
                 throw new Exception('Token: ' . $_GET['cg_token'] . ' do not match');
 
-            $coingate = new CoingateMerchant(['app_id' => $this->config->get('coingate_app_id'), 'api_key' => $this->config->get('coingate_api_key'), 'api_secret' => $this->config->get('coingate_api_secret'), 'mode' => $this->config->get('coingate_test') == 1 ? 'sandbox' : 'live']);
+            $coingate = new CoingateMerchant(array('app_id' => $this->config->get('coingate_app_id'), 'api_key' => $this->config->get('coingate_api_key'), 'api_secret' => $this->config->get('coingate_api_secret'), 'mode' => $this->config->get('coingate_test') == 1 ? 'sandbox' : 'live'));
             $coingate->get_order($_REQUEST['id']);
 
             if (!$coingate->success)

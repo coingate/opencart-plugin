@@ -11,16 +11,16 @@ class ModelPaymentCoingate extends Model
         else
             $status = FALSE;
 
-        $method_data = [];
+        $method_data = array();
 
         if ($status) {
-            $method_data = [
+            $method_data = array(
                 'code'       => 'coingate',
                 'title'      => $this->language->get('text_title'),
                 'terms'      => '',
                 'sort_order' => $this->config->get('coingate_sort_order')
 
-            ];
+            );
         }
 
         return $method_data;

@@ -4,7 +4,7 @@ require_once(DIR_SYSTEM . 'library/vendor/coingate/coingate_merchant.class.php')
 
 class ControllerPaymentCoingate extends Controller
 {
-    private $error = [];
+    private $error = array();
 
     public function __construct($registry)
     {
@@ -59,22 +59,22 @@ class ControllerPaymentCoingate extends Controller
         $this->load->model('localisation/order_status');
         $data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
-        $data['breadcrumbs'] = [];
+        $data['breadcrumbs'] = array();
 
-        $data['breadcrumbs'][] = [
+        $data['breadcrumbs'][] = array(
             'text' => $this->language->get('home_text'),
             'href' => $this->url->link('common/dashboard', 'token=' . $this->session->data['token'], $this->config->get('config_secure'))
-        ];
+        );
 
-        $data['breadcrumbs'][] = [
+        $data['breadcrumbs'][] = array(
             'text' => $this->language->get('payment_text'),
             'href' => $this->url->link('extension/payment', 'token=' . $this->session->data['token'], $this->config->get('config_secure'))
-        ];
+        );
 
-        $data['breadcrumbs'][] = [
+        $data['breadcrumbs'][] = array(
             'text' => $this->language->get('heading_title'),
             'href' => $this->url->link('payment/coingate', 'token=' . $this->session->data['token'], $this->config->get('config_secure'))
-        ];
+        );
 
         $data['action'] = $this->url->link('payment/coingate', 'token=' . $this->session->data['token'], $this->config->get('config_secure'));
         $data['cancel'] = $this->url->link('extension/payment', 'token=' . $this->session->data['token'], $this->config->get('config_secure'));
@@ -162,10 +162,9 @@ class ControllerPaymentCoingate extends Controller
         if (!$this->request->post['coingate_api_secret'])
             $this->error['coingate_api_secret'] = $this->language->get('api_secret_error');
 
-        if (!in_array($this->request->post['coingate_receive_currency'], ['eur', 'usd', 'btc']))
+        if (!in_array($this->request->post['coingate_receive_currency'], array('eur', 'usd', 'btc')))
             $this->error['coingate_receive_currency'] = $this->language->get('receive_currency_error');
 
         return !$this->error;
     }
 }
-

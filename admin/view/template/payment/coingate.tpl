@@ -200,8 +200,9 @@
 
                     <div class="form-group">
                         <label class="col-sm-2 control-label"><?php echo $sort_order_label; ?></label>
+
                         <div class="col-sm-10">
-                            <input type="text" name="coingate_sort_order" value="<?php echo $coingate_sort_order; ?>" class="form-control" />
+                            <input type="text" name="coingate_sort_order" value="<?php echo $coingate_sort_order; ?>" class="form-control"/>
                         </div>
                     </div>
                 </form>
