@@ -2,6 +2,8 @@
 
 require_once DIR_SYSTEM . 'library/vendor/coingate/coingate_merchant.class.php';
 
+define('COINGATE_OPENCART_EXTENSION_VERSION', '1.0.2');
+
 class ControllerPaymentCoingate extends Controller
 {
 
@@ -34,7 +36,7 @@ class ControllerPaymentCoingate extends Controller
 
         $order = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
-        $coingate = new CoingateMerchant(array('app_id' => $this->config->get('coingate_app_id'), 'api_key' => $this->config->get('coingate_api_key'), 'api_secret' => $this->config->get('coingate_api_secret'), 'mode' => $this->config->get('coingate_test') == 1 ? 'sandbox' : 'live'));
+        $coingate = $this->coingate_merchant();
 
         $token = $this->generate_token($order['order_id']);
 
@@ -95,7 +97,8 @@ class ControllerPaymentCoingate extends Controller
             if ($token == '' || $_GET['cg_token'] != $token)
                 throw new Exception('Token: ' . $_GET['cg_token'] . ' do not match');
 
-            $coingate = new CoingateMerchant(array('app_id' => $this->config->get('coingate_app_id'), 'api_key' => $this->config->get('coingate_api_key'), 'api_secret' => $this->config->get('coingate_api_secret'), 'mode' => $this->config->get('coingate_test') == 1 ? 'sandbox' : 'live'));
+            $coingate = $this->coingate_merchant();
+
             $coingate->get_order($_REQUEST['id']);
 
             if (!$coingate->success)
@@ -132,5 +135,17 @@ class ControllerPaymentCoingate extends Controller
         } else {
             return 'default/template/payment/' . $template;
         }
+    }
+
+    private function coingate_merchant() {
+        return new CoingateMerchant(
+            array(
+                'app_id'        => $this->config->get('coingate_app_id'),
+                'api_key'       => $this->config->get('coingate_api_key'),
+                'api_secret'    => $this->config->get('coingate_api_secret'),
+                'mode'          => $this->config->get('coingate_test') == 1 ? 'sandbox' : 'live',
+                'user_agent'    => 'CoinGate - OpenCart Extension v' . COINGATE_OPENCART_EXTENSION_VERSION
+            )
+        );
     }
 }
