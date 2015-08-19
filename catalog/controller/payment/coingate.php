@@ -2,7 +2,7 @@
 
 require_once DIR_SYSTEM . 'library/vendor/coingate/coingate_merchant.class.php';
 
-define('COINGATE_OPENCART_EXTENSION_VERSION', '1.0.2');
+define('COINGATE_OPENCART_EXTENSION_VERSION', '1.0.3');
 
 class ControllerPaymentCoingate extends Controller
 {
