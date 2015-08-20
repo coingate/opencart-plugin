@@ -64,6 +64,7 @@ class ControllerPaymentCoingate extends Controller
 
             $this->response->redirect($coingate_response['payment_url']);
         } else {
+            $this->log->write('CoinGate create order error. Respose HTTP status: ' . $coingate->status_code . '.' . (!empty($coingate->response) ? ' Response body: ' . $coingate->response : ''));
             $this->response->redirect($this->url->link('checkout/checkout', '', $this->config->get('config_secure')));
         }
     }
@@ -102,7 +103,8 @@ class ControllerPaymentCoingate extends Controller
             $coingate->get_order($_REQUEST['id']);
 
             if (!$coingate->success)
-                throw new Exception('CoinGate Order does not exists');
+                $this->log->write('CoinGate get order error. Respose HTTP status: ' . $coingate->status_code . '.' . (!empty($coingate->response) ? ' Response body: ' . $coingate->response : ''));
+                throw new Exception('CoinGate Order Error. ' . $coingate->response);
 
             $coingate_response = json_decode($coingate->response, TRUE);
 
