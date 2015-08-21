@@ -2,7 +2,7 @@
 
 require_once DIR_SYSTEM . 'library/vendor/coingate/coingate_merchant.class.php';
 
-define('COINGATE_OPENCART_EXTENSION_VERSION', '1.0.4');
+define('COINGATE_OPENCART_EXTENSION_VERSION', '1.0.5');
 
 class ControllerPaymentCoingate extends Controller
 {
@@ -90,26 +90,30 @@ class ControllerPaymentCoingate extends Controller
         $order = $this->model_checkout_order->getOrder($_REQUEST['order_id']);
 
         try {
-            if (!$order || !$order['order_id'])
+            if (!$order || !$order['order_id']) {
                 throw new Exception('Order #' . $_REQUEST['order_id'] . ' does not exists');
+            }
 
             $token = $this->generate_token($order['order_id']);
 
-            if ($token == '' || $_GET['cg_token'] != $token)
+            if ($token == '' || $_GET['cg_token'] != $token) {
                 throw new Exception('Token: ' . $_GET['cg_token'] . ' do not match');
+            }
 
             $coingate = $this->coingate_merchant();
 
             $coingate->get_order($_REQUEST['id']);
 
-            if (!$coingate->success)
+            if (!$coingate->success) {
                 $this->log->write('CoinGate get order error. Respose HTTP status: ' . $coingate->status_code . '.' . (!empty($coingate->response) ? ' Response body: ' . $coingate->response : ''));
                 throw new Exception('CoinGate Order Error. ' . $coingate->response);
+            }
 
             $coingate_response = json_decode($coingate->response, TRUE);
 
-            if (!is_array($coingate_response))
+            if (!is_array($coingate_response)) {
                 throw new Exception('Something wrong with callback');
+            }
 
             if ($coingate_response['status'] == 'paid') {
                 $this->model_checkout_order->addOrderHistory($order['order_id'], $this->config->get('coingate_completed_order_status_id'));
