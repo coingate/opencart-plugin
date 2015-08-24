@@ -1,9 +1,5 @@
 <?php echo $header; ?><?php echo $column_left; ?>
 
-<?php if ($error_warning): ?>
-<div class="warning"><?php echo $error_warning; ?></div>
-<?php endif; ?>
-
 <div id="content">
     <div class="page-header">
         <div class="container-fluid">
@@ -21,11 +17,6 @@
         </div>
     </div>
 
-    <?php if ($error_warning) { ?>
-    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> <?php echo $error_warning; ?>
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-    </div>
-    <?php } ?>
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title"><i class="fa fa-pencil"></i> <?php echo $edit_text; ?></h3>
@@ -35,7 +26,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="alert alert-info">
-                        Having trouble? We can help you! <a href="<?php echo $log_download_url; ?>" target="_blank">Download log file</a> and send to our support <a href="mailto:support@coingate.com" target="_blank">support@coingate.com</a>
+                        Having trouble? We can help you! <a href="<?php echo $log_download_url; ?>" target="_blank">Click here to generate the debug information</a> and send it to <a href="mailto:support@coingate.com" target="_blank">support@coingate.com</a>
                     </div>
                 </div>
             </div>

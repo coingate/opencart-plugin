@@ -33,3 +33,4 @@ $_['geo_zone_label'] = 'GEO Zone:';
 $_['sort_order_label'] = 'Sort Order:';
 $_['all_geo_zones_text'] = 'All GEO zones';
 $_['text_coingate'] = '<a href="https://coingate.com" target="_blank"><img src="view/image/payment/coingate.png" alt="CoinGate" title="CoinGate" style="border: 1px solid #EEEEEE;" /></a>';
+$_['coingate_connection_error'] = 'Cannot connect to CoinGate. Please check your API credentials.';

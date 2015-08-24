@@ -89,6 +89,13 @@ class CoingateMerchant {
         $this->response     = $response;
     }
 
+    public function test_connection()
+    {
+        $this->request('/auth/test-connection');
+
+        return $this->success;
+    }
+
     private function nonce()
     {
         return time();

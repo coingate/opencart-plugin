@@ -17,6 +17,16 @@ class ControllerPaymentCoingate extends Controller
 
     public function download_log()
     {
+        $coingate = new CoingateMerchant(
+            array(
+                'app_id'        => $this->config->get('coingate_app_id'),
+                'api_key'       => $this->config->get('coingate_api_key'),
+                'api_secret'    => $this->config->get('coingate_api_secret'),
+                'mode'          => $this->config->get('coingate_test') == 1 ? 'sandbox' : 'live',
+                'user_agent'    => 'CoinGate - OpenCart Extension v' . COINGATE_OPENCART_EXTENSION_VERSION
+            )
+        );
+
         echo '<pre>';
         echo "Error logs:\n";
         readfile(DIR_LOGS . 'coingate.log');
@@ -31,6 +41,9 @@ class ControllerPaymentCoingate extends Controller
         echo 'Installed Modules: ' .  join(', ', $this->model_extension_extension->getInstalled('module')) . "\n";
         echo 'Installed Payments Methods: ' .  join(', ', $this->model_extension_extension->getInstalled('payment')) . "\n";
         echo 'Installed Shipping Methods: ' .  join(', ', $this->model_extension_extension->getInstalled('shipping')) . "\n";
+        echo 'CoinGate APP ID: ' . $this->config->get('coingate_app_id') . "\n";
+        echo 'OpenCart CoinGate Plugin Environment: ' . ($this->config->get('coingate_test') == 1 ? 'Test' : 'Production') . "\n";
+        echo 'Connection with CoinGate: ' . ($coingate->test_connection() ? 'Success' : 'Error') . "\n";
         echo '</pre>';
     }
 
