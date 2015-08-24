@@ -4,12 +4,12 @@
  * PHP CoinGate Merchant Class
  *
  * @author    CoinGate <info@coingate.com>
- * @version   1.0.2
+ * @version   1.0.3
  * @link      http://developer.coingate.com  
  * @license   MIT
  */
 
-define('CLASS_VERSION', '1.0.2');
+define('CLASS_VERSION', '1.0.3');
 
 class CoingateMerchant {
     private $app_id             = '';
@@ -46,6 +46,12 @@ class CoingateMerchant {
     public function get_order($order_id)
     {
         $this->request('/orders/' . $order_id);
+    }
+
+    public function test_connection() {
+        $this->request('/auth/test');
+
+        return $this->success && $this->response == 'OK';
     }
 
     public function request($url, $method = 'GET', $params = array())
@@ -89,13 +95,6 @@ class CoingateMerchant {
         $this->response     = $response;
     }
 
-    public function test_connection()
-    {
-        $this->request('/auth/test-connection');
-
-        return $this->success;
-    }
-
     private function nonce()
     {
         return time();
@@ -107,3 +106,5 @@ class CoingateMerchant {
         $this->api_url .= $this->version;
     }
 }
+
+?>
