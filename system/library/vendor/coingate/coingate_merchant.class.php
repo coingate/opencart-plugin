@@ -100,5 +100,3 @@ class CoingateMerchant {
         $this->api_url .= $this->version;
     }
 }
-
-?>
