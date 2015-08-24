@@ -12,6 +12,7 @@ class ControllerPaymentCoingate extends Controller
         parent::__construct($registry);
 
         $this->load->language('payment/coingate');
+        $this->log = new Log('coingate.log');
     }
 
     public function index()
