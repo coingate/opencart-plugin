@@ -202,6 +202,21 @@ class ControllerPaymentCoingate extends Controller
         if (!in_array($this->request->post['coingate_receive_currency'], array('eur', 'usd', 'btc')))
             $this->error['coingate_receive_currency'] = $this->language->get('receive_currency_error');
 
+        if (!$this->error) {
+            $coingate = new CoingateMerchant(
+                array(
+                    'app_id' => $this->request->post['coingate_app_id'],
+                    'api_key' => $this->request->post['coingate_api_key'],
+                    'api_secret' => $this->request->post['coingate_api_secret'],
+                    'mode' => $this->request->post['coingate_test'] == 1 ? 'sandbox' : 'live',
+                    'user_agent' => 'CoinGate - OpenCart Extension v' . COINGATE_OPENCART_EXTENSION_VERSION
+                )
+            );
+
+            if (!$coingate->test_connection())
+                $this->error['warning'] = $this->language->get('coingate_connection_error');
+        }
+
         return !$this->error;
     }
 }
