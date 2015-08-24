@@ -26,7 +26,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="alert alert-info">
-                        Having trouble? We can help you! <a href="<?php echo $log_download_url; ?>" target="_blank">Click here to generate the debug information</a> and send it to <a href="mailto:support@coingate.com" target="_blank">support@coingate.com</a>
+                        Having trouble? We can help you! <a href="<?php echo $log_download_url; ?>" target="_blank">Click here to generate the debug information</a> and send it to <a href="mailto:support@coingate.com">support@coingate.com</a>
                     </div>
                 </div>
             </div>
@@ -232,12 +232,6 @@
                         <input type="text" name="coingate_sort_order" value="<?php echo $coingate_sort_order; ?>"
                                class="form-control"/>
                     </div>
-                </div>
-
-                <div class="col-sm-10 col-sm-offset-2">
-                    <i>Extension not working? <a
-                                href="http://support.coingate.com/knowledge_base/topics/plugin-slash-extension-slash-module-not-working-common-issues"
-                                target="_blank">See most common plugin issues.</a></i>
                 </div>
             </form>
         </div>

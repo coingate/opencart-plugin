@@ -17,6 +17,8 @@ class ControllerPaymentCoingate extends Controller
 
     public function download_log()
     {
+         $this->load->model('extension/extension');
+
         $coingate = new CoingateMerchant(
             array(
                 'app_id'        => $this->config->get('coingate_app_id'),
@@ -28,12 +30,8 @@ class ControllerPaymentCoingate extends Controller
         );
 
         echo '<pre>';
-        echo "Error logs:\n";
-        readfile(DIR_LOGS . 'coingate.log');
 
-        $this->load->model('extension/extension');
-
-        echo "\nOpenCart Data:\n";
+        echo "# OpenCart Data:\n";
         echo "PHP Version: " . phpversion() . "\n";
         echo 'cURL Version: ' . json_encode(curl_version()) . "\n";
         echo 'OpenCart Version: ' . VERSION . "\n";
@@ -42,8 +40,12 @@ class ControllerPaymentCoingate extends Controller
         echo 'Installed Payments Methods: ' .  join(', ', $this->model_extension_extension->getInstalled('payment')) . "\n";
         echo 'Installed Shipping Methods: ' .  join(', ', $this->model_extension_extension->getInstalled('shipping')) . "\n";
         echo 'CoinGate APP ID: ' . $this->config->get('coingate_app_id') . "\n";
-        echo 'OpenCart CoinGate Plugin Environment: ' . ($this->config->get('coingate_test') == 1 ? 'Test' : 'Production') . "\n";
+        echo 'OpenCart CoinGate Plugin Environment: ' . ($this->config->get('coingate_test') == 1 ? 'Sandbox' : 'Live') . "\n";
         echo 'Connection with CoinGate: ' . ($coingate->test_connection() ? 'Success' : 'Error') . "\n";
+        
+        echo "\n# Error logs:\n";
+        readfile(DIR_LOGS . 'coingate.log');
+
         echo '</pre>';
     }
 
