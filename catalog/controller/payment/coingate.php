@@ -121,7 +121,7 @@ class ControllerPaymentCoingate extends Controller
                 $this->model_checkout_order->addOrderHistory($order['order_id'], $this->config->get('coingate_cancelled_order_status_id'));
             } elseif ($coingate_response['status'] == 'expired') {
                 $this->model_checkout_order->addOrderHistory($order['order_id'], $this->config->get('coingate_expired_order_status_id'));
-            } else {
+            } elseif ($coingate_response['status'] == 'invalid') {
                 $this->model_checkout_order->addOrderHistory($order['order_id'], $this->config->get('coingate_failed_order_status_id'));
             }
         } catch (Exception $e) {
