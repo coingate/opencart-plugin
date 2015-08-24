@@ -1,5 +1,6 @@
 <?php
 
+require_once(DIR_SYSTEM . 'library/vendor/coingate/version.php');
 require_once(DIR_SYSTEM . 'library/vendor/coingate/coingate_merchant.class.php');
 
 class ControllerPaymentCoingate extends Controller
@@ -14,6 +15,25 @@ class ControllerPaymentCoingate extends Controller
         $this->load->model('setting/setting');
     }
 
+    public function download_log()
+    {
+        echo '<pre>';
+        echo "Error logs:\n";
+        readfile(DIR_LOGS . 'coingate.log');
+
+        $this->load->model('extension/extension');
+
+        echo "\nOpenCart Data:\n";
+        echo "PHP Version: " . phpversion() . "\n";
+        echo 'cURL Version: ' . json_encode(curl_version()) . "\n";
+        echo 'OpenCart Version: ' . VERSION . "\n";
+        echo 'CoinGate Payment Plugin Version ' . COINGATE_OPENCART_EXTENSION_VERSION . "\n";
+        echo 'Installed Modules: ' .  join(', ', $this->model_extension_extension->getInstalled('module')) . "\n";
+        echo 'Installed Payments Methods: ' .  join(', ', $this->model_extension_extension->getInstalled('payment')) . "\n";
+        echo 'Installed Shipping Methods: ' .  join(', ', $this->model_extension_extension->getInstalled('shipping')) . "\n";
+        echo '</pre>';
+    }
+
     public function index()
     {
         $this->document->setTitle($this->language->get('heading_title'));
@@ -26,6 +46,9 @@ class ControllerPaymentCoingate extends Controller
                 $this->response->redirect($this->url->link('extension/payment', 'token=' . $this->session->data['token'], $this->config->get('config_secure')));
             }
         }
+
+        $this->load->model('extension/extension');
+        $data['iamtesting'] = join(', ', $this->model_extension_extension->getInstalled('shipping'));
 
         $data['heading_title'] = $this->language->get('heading_title');
         $data['status_off'] = $this->language->get('status_off');
@@ -55,6 +78,7 @@ class ControllerPaymentCoingate extends Controller
         $data['failed_order_status_label'] = $this->language->get('failed_order_status_label');
         $data['completed_order_status_label'] = $this->language->get('completed_order_status_label');
         $data['sort_order_label'] = $this->language->get('sort_order_label');
+        $data['log_download_url'] = $this->url->link('payment/coingate/download_log', 'token=' . $this->session->data['token'], $this->config->get('config_secure'));
 
         $this->load->model('localisation/order_status');
         $data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
