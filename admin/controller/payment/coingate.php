@@ -216,7 +216,7 @@ class ControllerPaymentCoingate extends Controller
             );
 
             if (!$coingate->test_connection())
-                $this->error['warning'] = $this->language->get('coingate_connection_error');
+                $this->error['warning'] = ($coingate->status_code == 0 ? $this->language->get('curl_problem_error') : $this->language->get('coingate_connection_error') );
         }
 
         return !$this->error;
