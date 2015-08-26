@@ -4,7 +4,7 @@
  * PHP CoinGate Merchant Class
  *
  * @author    CoinGate <info@coingate.com>
- * @version   1.0.3
+ * @version   1.0.4
  * @link      http://developer.coingate.com  
  * @license   MIT
  */
@@ -89,8 +89,8 @@ class CoingateMerchant {
         $response       = curl_exec($curl);
         $http_status    = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-        $this->curl_error['message'] = curl_error($curl);
-        $this->curl_error['number'] = curl_errno($curl);
+        $this->curl_error['message']    = curl_error($curl);
+        $this->curl_error['number']     = curl_errno($curl);
 
         curl_close($curl);
 
