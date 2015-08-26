@@ -64,7 +64,13 @@ class ControllerPaymentCoingate extends Controller
 
             $this->response->redirect($coingate_response['payment_url']);
         } else {
-            $this->log->write('CoinGate create order error. Respose HTTP status: ' . $coingate->status_code . '.' . (!empty($coingate->response) ? ' Response body: ' . $coingate->response : ''));
+            $this->log->write('[Catalog] Confirming order error'
+                . ' - App ID: ' . $this->config->get('coingate_app_id')
+                . '; HTTP Status: ' . $coingate->status_code
+                . '; Response: ' . $coingate->response
+                . '; cURL Error: ' . json_encode($coingate->curl_error)
+                . "\n");
+
             $this->response->redirect($this->url->link('checkout/checkout', '', $this->config->get('config_secure')));
         }
     }
@@ -105,7 +111,13 @@ class ControllerPaymentCoingate extends Controller
             $coingate->get_order($_REQUEST['id']);
 
             if (!$coingate->success) {
-                $this->log->write('CoinGate get order error. Respose HTTP status: ' . $coingate->status_code . '.' . (!empty($coingate->response) ? ' Response body: ' . $coingate->response : ''));
+                $this->log->write('[Catalog] Order callback error'
+                    . ' - App ID: ' . $this->config->get('coingate_app_id')
+                    . '; HTTP Status: ' . $coingate->status_code
+                    . '; Response: ' . $coingate->response
+                    . '; cURL Error: ' . json_encode($coingate->curl_error)
+                    . "\n");
+
                 throw new Exception('CoinGate Order Error. ' . $coingate->response);
             }
 

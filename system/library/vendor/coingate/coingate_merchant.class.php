@@ -88,6 +88,9 @@ class CoingateMerchant {
         $response       = curl_exec($curl);
         $http_status    = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
+        $this->curl_error['message'] = curl_error($curl);
+        $this->curl_error['number'] = curl_errno($curl);
+
         curl_close($curl);
 
         $this->success      = $http_status == 200;

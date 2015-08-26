@@ -13,11 +13,12 @@ class ControllerPaymentCoingate extends Controller
 
         $this->load->language('payment/coingate');
         $this->load->model('setting/setting');
+        $this->log = new Log('coingate.log');
     }
 
     public function download_log()
     {
-         $this->load->model('extension/extension');
+        $this->load->model('extension/extension');
 
         $coingate = new CoingateMerchant(
             array(
@@ -42,6 +43,7 @@ class ControllerPaymentCoingate extends Controller
         echo 'CoinGate APP ID: ' . $this->config->get('coingate_app_id') . "\n";
         echo 'OpenCart CoinGate Plugin Environment: ' . ($this->config->get('coingate_test') == 1 ? 'Sandbox' : 'Live') . "\n";
         echo 'Connection with CoinGate: ' . ($coingate->test_connection() ? 'Success' : 'Error') . "\n";
+        echo 'cURL Error: ' . json_encode($coingate->curl_error) . "\n";
         
         echo "\n# Error logs:\n";
         readfile(DIR_LOGS . 'coingate.log');
@@ -215,8 +217,17 @@ class ControllerPaymentCoingate extends Controller
                 )
             );
 
-            if (!$coingate->test_connection())
-                $this->error['warning'] = ($coingate->status_code == 0 ? $this->language->get('curl_problem_error') : $this->language->get('coingate_connection_error') );
+            if (!$coingate->test_connection()) {
+                $this->error['warning'] = ($coingate->status_code == 0 ? $this->language->get('curl_problem_error') : $this->language->get('coingate_connection_error'));
+
+                $this->log->write(
+                    '[Admin] Testing connection error'
+                    . ' - App ID: ' . $this->request->post['coingate_app_id']
+                    . '; HTTP Status: ' . $coingate->status_code
+                    . '; Response: ' . $coingate->response
+                    . '; cURL Error: ' . json_encode($coingate->curl_error)
+                    . "\n");
+            }
         }
 
         return !$this->error;
