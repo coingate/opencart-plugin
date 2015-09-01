@@ -35,4 +35,3 @@ $_['all_geo_zones_text'] = 'All GEO zones';
 $_['text_coingate'] = '<a href="https://coingate.com" target="_blank"><img src="view/image/payment/coingate.png" alt="CoinGate" title="CoinGate" style="border: 1px solid #EEEEEE;" /></a>';
 $_['coingate_connection_error'] = 'Cannot connect to CoinGate. Please check your API credentials.';
 $_['curl_problem_error'] = 'Something wrong with cURL. Please contact CoinGate support at <a href="mailto:support@coingate.com">support@coingate.com</a>';
-$_['receive_currency_btc_error'] = 'When Currency is BTC Receive Currency cannot be any except BTC. <a href="#">More info</a>.';

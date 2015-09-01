@@ -214,9 +214,6 @@ class ControllerPaymentCoingate extends Controller
         if (!in_array($this->request->post['coingate_receive_currency'], array('eur', 'usd', 'btc')))
             $this->error['coingate_receive_currency'] = $this->language->get('receive_currency_error');
 
-        if ($this->request->post['coingate_currency'] == 'btc' && $this->request->post['coingate_receive_currency'] != 'btc')
-            $this->error['coingate_receive_currency'] = $this->language->get('receive_currency_btc_error');
-
         if (!$this->error) {
             $coingate = new CoingateMerchant(
                 array(
