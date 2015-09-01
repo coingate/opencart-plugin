@@ -181,6 +181,14 @@ class ControllerPaymentCoingate extends Controller
         else
             $data['coingate_sort_order'] = $this->config->get('coingate_sort_order');
 
+        $this->load->model('localisation/currency');
+        $currencies = $this->model_localisation_currency->getCurrencies();
+        $data['currencies'] = array();
+
+        foreach ($currencies as $key => $value) {
+            $data['currencies'][] = strtolower($key);
+        }
+
         $this->template = 'payment/coingate.tpl';
         $data['header'] = $this->load->controller('common/header');
         $data['column_left'] = $this->load->controller('common/column_left');
@@ -205,6 +213,9 @@ class ControllerPaymentCoingate extends Controller
 
         if (!in_array($this->request->post['coingate_receive_currency'], array('eur', 'usd', 'btc')))
             $this->error['coingate_receive_currency'] = $this->language->get('receive_currency_error');
+
+        if ($this->request->post['coingate_currency'] == 'btc' && $this->request->post['coingate_receive_currency'] != 'btc')
+            $this->error['coingate_receive_currency'] = $this->language->get('receive_currency_btc_error');
 
         if (!$this->error) {
             $coingate = new CoingateMerchant(

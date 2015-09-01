@@ -33,6 +33,18 @@
                 </div>
             </div>
 
+            <?php if(in_array('btc', $currencies)) { ?>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="alert alert-warning"><i
+                                class="fa fa-exclamation-circle"></i>
+                        We noticed you're using BTC as Currency in your settings. Take a note that we can't convert BTC to Fiat. Please select BTC to BTC instead or remove BTC from your currency list.
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    </div>
+                </div>
+            </div>
+            <?php } ?>
+
             <?php if(in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'))) { ?>
             <div class="row">
                 <div class="col-sm-12">
