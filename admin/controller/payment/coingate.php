@@ -13,7 +13,15 @@ class ControllerPaymentCoingate extends Controller
 
         $this->load->language('payment/coingate');
         $this->load->model('setting/setting');
+        $this->load->model('localisation/order_status');
         $this->log = new Log('coingate.log');
+    }
+
+    private function get_order_status_name($order_status_id) {
+        if ($order_status = $this->model_localisation_order_status->getOrderStatus($order_status_id))
+            return $order_status['name'];
+        else
+            return '-';
     }
 
     public function download_log()
@@ -32,6 +40,7 @@ class ControllerPaymentCoingate extends Controller
 
         $this->load->model('localisation/currency');
 
+
         echo '<pre>';
 
         echo "# OpenCart Data:\n";
@@ -48,7 +57,12 @@ class ControllerPaymentCoingate extends Controller
         echo 'cURL Error: ' . json_encode($coingate->curl_error) . "\n";
         echo 'User Currencies: ' . json_encode($this->model_localisation_currency->getCurrencies()) . "\n";
         echo 'Receive Currency: ' . $this->config->get('coingate_receive_currency') . "\n";
-        
+        echo 'New Order Status: ' . $this->get_order_status_name($this->config->get('coingate_new_order_status_id')) . "\n";
+        echo 'Cancelled Order Status: ' . $this->get_order_status_name($this->config->get('coingate_cancelled_order_status_id')) . "\n";
+        echo 'Expired Order Status: ' . $this->get_order_status_name($this->config->get('coingate_expired_order_status_id')) . "\n";
+        echo 'Failed Order Status: ' . $this->get_order_status_name($this->config->get('coingate_failed_order_status_id')) . "\n";
+        echo 'Completed Order Status: ' . $this->get_order_status_name($this->config->get('coingate_completed_order_status_id')) . "\n";
+
         echo "\n# Error logs:\n";
         readfile(DIR_LOGS . 'coingate.log');
 
@@ -101,7 +115,6 @@ class ControllerPaymentCoingate extends Controller
         $data['sort_order_label'] = $this->language->get('sort_order_label');
         $data['log_download_url'] = $this->url->link('payment/coingate/download_log', 'token=' . $this->session->data['token'], $this->config->get('config_secure'));
 
-        $this->load->model('localisation/order_status');
         $data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
         $data['breadcrumbs'] = array();
