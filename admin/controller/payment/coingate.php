@@ -30,6 +30,8 @@ class ControllerPaymentCoingate extends Controller
             )
         );
 
+        $this->load->model('localisation/currency');
+
         echo '<pre>';
 
         echo "# OpenCart Data:\n";
@@ -44,6 +46,8 @@ class ControllerPaymentCoingate extends Controller
         echo 'OpenCart CoinGate Plugin Environment: ' . ($this->config->get('coingate_test') == 1 ? 'Sandbox' : 'Live') . "\n";
         echo 'Connection with CoinGate: ' . ($coingate->test_connection() ? 'Success' : 'Error') . "\n";
         echo 'cURL Error: ' . json_encode($coingate->curl_error) . "\n";
+        echo 'User Currencies: ' . json_encode($this->model_localisation_currency->getCurrencies()) . "\n";
+        echo 'Receive Currency: ' . $this->config->get('coingate_receive_currency') . "\n";
         
         echo "\n# Error logs:\n";
         readfile(DIR_LOGS . 'coingate.log');
