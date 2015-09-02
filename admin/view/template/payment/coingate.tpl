@@ -38,7 +38,7 @@
                     <div class="col-sm-12">
                         <div class="alert alert-warning">
                             <i class="fa fa-exclamation-circle"></i>
-                            We noticed you're using BTC as Currency in your settings. Take a note that we can't convert BTC to Fiat. Please select BTC to BTC instead or remove BTC from your currency list.
+                            We noticed you're using BTC as Currency in your settings. Take a note that we can't convert BTC to EUR/USD.
                         </div>
                     </div>
                 </div>
@@ -49,9 +49,7 @@
                     <div class="col-sm-12">
                         <div class="alert alert-warning">
                             <i class="fa fa-exclamation-circle"></i>
-                            We noticed you are using
-                            <i>localhost</i> to host your website. Take a note that we may not be able to send payment callback to localhost. You must make your website available from outside.
-                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            We have noticed that you are using <i>localhost</i> to host your website. Please take note that we may not be able to send payment callback to localhost. You must make your website available from outside.
                         </div>
                     </div>
                 </div>
