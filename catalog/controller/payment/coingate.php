@@ -150,6 +150,8 @@ class ControllerPaymentCoingate extends Controller
     {
         if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/' . $template)) {
             return $this->config->get('config_template') . '/template/payment/' . $template;
+        } elseif(DIR_TEMPLATE . file_exists($this->config->get('config_template') . '/payment/' . $template)) {
+            return $this->config->get('config_template') . '/payment/' . $template;
         } else {
             return 'default/template/payment/' . $template;
         }
