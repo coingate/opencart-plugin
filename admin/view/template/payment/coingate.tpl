@@ -138,6 +138,10 @@
                             <option value="1" selected="selected"><?php echo $test_on; ?></option>
                             <?php endif;?>
                         </select>
+
+                        <div class="help-block">
+                          Enable "test mode" to test on <a href="https://sandbox.coingate.com/" target="_blank">sandbox.coingate.com</a>.
+                        </div>
                     </div>
                 </div>
 
@@ -153,6 +157,10 @@
                             ><?php echo $currencies_label[$currency]; ?></option>
                             <?php endforeach; ?>
                         </select>
+
+                        <div class="help-block">
+                          Currency you want to receive at CoinGate.com
+                        </div>
                     </div>
 
                     <?php if ($receive_currency_error) { ?>
