@@ -102,6 +102,9 @@ class ControllerPaymentCoingate extends Controller
         $data['edit_text']                    = $this->language->get('edit_text');
         $data['button_save']                  = $this->language->get('button_save');
         $data['button_cancel']                = $this->language->get('button_cancel');
+        $data['entry_total']                  = $this->language->get('entry_total');
+        $data['entry_geo_zone']               = $this->language->get('entry_geo_zone');
+        $data['text_all_zones']               = $this->language->get('text_all_zones');
         $data['error_warning']                = isset($this->error['warning']) ? $this->error['warning'] : '';
         $data['app_id_error']                 = isset($this->error['coingate_app_id']) ? $this->error['coingate_app_id'] : '';
         $data['api_key_error']                = isset($this->error['coingate_api_key']) ? $this->error['coingate_api_key'] : '';
@@ -197,6 +200,19 @@ class ControllerPaymentCoingate extends Controller
             $data['coingate_sort_order'] = $this->request->post['coingate_sort_order'];
         else
             $data['coingate_sort_order'] = $this->config->get('coingate_sort_order');
+
+        if (isset($this->request->post['coingate_total']))
+            $data['coingate_total'] = $this->request->post['coingate_total'];
+        else
+            $data['coingate_total'] = $this->config->get('coingate_total');
+
+        if (isset($this->request->post['coingate_geo_zone_id']))
+            $data['coingate_geo_zone_id'] = $this->request->post['coingate_geo_zone_id'];
+        else
+            $data['coingate_geo_zone_id'] = $this->config->get('coingate_geo_zone_id');
+
+        $this->load->model('localisation/geo_zone');
+        $data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 
         $this->load->model('localisation/currency');
         $currencies         = $this->model_localisation_currency->getCurrencies();
