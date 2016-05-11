@@ -1,7 +1,9 @@
 <?php
 
+use CoinGate\CoinGate;
+
+require_once(DIR_SYSTEM . 'library/vendor/coingate/init.php');
 require_once(DIR_SYSTEM . 'library/vendor/coingate/version.php');
-require_once(DIR_SYSTEM . 'library/vendor/coingate/coingate_merchant.class.php');
 
 class ControllerPaymentCoingate extends Controller
 {
@@ -14,10 +16,20 @@ class ControllerPaymentCoingate extends Controller
         $this->load->language('payment/coingate');
         $this->load->model('setting/setting');
         $this->load->model('localisation/order_status');
+
+        CoinGate::config(array(
+            'app_id'      => $this->config->get('coingate_app_id'),
+            'api_key'     => $this->config->get('coingate_api_key'),
+            'api_secret'  => $this->config->get('coingate_api_secret'),
+            'environment' => $this->config->get('coingate_test') == 1 ? 'sandbox' : 'live',
+            'user_agent'  => 'CoinGate - OpenCart Extension v' . COINGATE_OPENCART_EXTENSION_VERSION
+        ));
+
         $this->log = new Log('coingate.log');
     }
 
-    private function get_order_status_name($order_status_id) {
+    private function get_order_status_name($order_status_id)
+    {
         if ($order_status = $this->model_localisation_order_status->getOrderStatus($order_status_id))
             return $order_status['name'];
         else
@@ -28,18 +40,7 @@ class ControllerPaymentCoingate extends Controller
     {
         $this->load->model('extension/extension');
 
-        $coingate = new CoingateMerchant(
-            array(
-                'app_id'        => $this->config->get('coingate_app_id'),
-                'api_key'       => $this->config->get('coingate_api_key'),
-                'api_secret'    => $this->config->get('coingate_api_secret'),
-                'mode'          => $this->config->get('coingate_test') == 1 ? 'sandbox' : 'live',
-                'user_agent'    => 'CoinGate - OpenCart Extension v' . COINGATE_OPENCART_EXTENSION_VERSION
-            )
-        );
-
         $this->load->model('localisation/currency');
-
 
         echo '<pre>';
 
@@ -48,13 +49,12 @@ class ControllerPaymentCoingate extends Controller
         echo 'cURL Version: ' . json_encode(curl_version()) . "\n";
         echo 'OpenCart Version: ' . VERSION . "\n";
         echo 'CoinGate Payment Plugin Version ' . COINGATE_OPENCART_EXTENSION_VERSION . "\n";
-        echo 'Installed Modules: ' .  join(', ', $this->model_extension_extension->getInstalled('module')) . "\n";
-        echo 'Installed Payments Methods: ' .  join(', ', $this->model_extension_extension->getInstalled('payment')) . "\n";
-        echo 'Installed Shipping Methods: ' .  join(', ', $this->model_extension_extension->getInstalled('shipping')) . "\n";
+        echo 'Installed Modules: ' . join(', ', $this->model_extension_extension->getInstalled('module')) . "\n";
+        echo 'Installed Payments Methods: ' . join(', ', $this->model_extension_extension->getInstalled('payment')) . "\n";
+        echo 'Installed Shipping Methods: ' . join(', ', $this->model_extension_extension->getInstalled('shipping')) . "\n";
         echo 'CoinGate APP ID: ' . $this->config->get('coingate_app_id') . "\n";
         echo 'OpenCart CoinGate Plugin Environment: ' . ($this->config->get('coingate_test') == 1 ? 'Sandbox' : 'Live') . "\n";
-        echo 'Connection with CoinGate: ' . ($coingate->test_connection() ? 'Success' : 'Error') . "\n";
-        echo 'cURL Error: ' . json_encode($coingate->curl_error) . "\n";
+        echo 'Connection with CoinGate: ' . (CoinGate::testConnection() === true ? 'Success' : 'Error') . "\n";
         echo 'User Currencies: ' . json_encode($this->model_localisation_currency->getCurrencies()) . "\n";
         echo 'Receive Currency: ' . $this->config->get('coingate_receive_currency') . "\n";
         echo 'New Order Status: ' . $this->get_order_status_name($this->config->get('coingate_new_order_status_id')) . "\n";
@@ -85,35 +85,35 @@ class ControllerPaymentCoingate extends Controller
         $this->load->model('extension/extension');
         $data['iamtesting'] = join(', ', $this->model_extension_extension->getInstalled('shipping'));
 
-        $data['heading_title'] = $this->language->get('heading_title');
-        $data['status_off'] = $this->language->get('status_off');
-        $data['status_on'] = $this->language->get('status_on');
-        $data['test_off'] = $this->language->get('test_off');
-        $data['test_on'] = $this->language->get('test_on');
-        $data['receive_currency_label'] = $this->language->get('receive_currency_label');
-        $data['currencies_label']['eur'] = $this->language->get('eur_label');
-        $data['currencies_label']['usd'] = $this->language->get('usd_label');
-        $data['currencies_label']['btc'] = $this->language->get('btc_label');
-        $data['app_id_label'] = $this->language->get('app_id_label');
-        $data['status_label'] = $this->language->get('status_label');
-        $data['api_key_label'] = $this->language->get('api_key_label');
-        $data['api_secret_label'] = $this->language->get('api_secret_label');
-        $data['test_label'] = $this->language->get('test_label');
-        $data['edit_text'] = $this->language->get('edit_text');
-        $data['button_save'] = $this->language->get('button_save');
-        $data['button_cancel'] = $this->language->get('button_cancel');
-        $data['error_warning'] = isset($this->error['warning']) ? $this->error['warning'] : '';
-        $data['app_id_error'] = isset($this->error['coingate_app_id']) ? $this->error['coingate_app_id'] : '';
-        $data['api_key_error'] = isset($this->error['coingate_api_key']) ? $this->error['coingate_api_key'] : '';
-        $data['api_secret_error'] = isset($this->error['coingate_api_secret']) ? $this->error['coigate_api_secret'] : '';
-        $data['receive_currency_error'] = isset($this->error['coingate_receive_currency']) ? $this->error['coingate_receive_currency'] : '';
-        $data['new_order_status_label'] = $this->language->get('new_order_status_label');
+        $data['heading_title']                = $this->language->get('heading_title');
+        $data['status_off']                   = $this->language->get('status_off');
+        $data['status_on']                    = $this->language->get('status_on');
+        $data['test_off']                     = $this->language->get('test_off');
+        $data['test_on']                      = $this->language->get('test_on');
+        $data['receive_currency_label']       = $this->language->get('receive_currency_label');
+        $data['currencies_label']['eur']      = $this->language->get('eur_label');
+        $data['currencies_label']['usd']      = $this->language->get('usd_label');
+        $data['currencies_label']['btc']      = $this->language->get('btc_label');
+        $data['app_id_label']                 = $this->language->get('app_id_label');
+        $data['status_label']                 = $this->language->get('status_label');
+        $data['api_key_label']                = $this->language->get('api_key_label');
+        $data['api_secret_label']             = $this->language->get('api_secret_label');
+        $data['test_label']                   = $this->language->get('test_label');
+        $data['edit_text']                    = $this->language->get('edit_text');
+        $data['button_save']                  = $this->language->get('button_save');
+        $data['button_cancel']                = $this->language->get('button_cancel');
+        $data['error_warning']                = isset($this->error['warning']) ? $this->error['warning'] : '';
+        $data['app_id_error']                 = isset($this->error['coingate_app_id']) ? $this->error['coingate_app_id'] : '';
+        $data['api_key_error']                = isset($this->error['coingate_api_key']) ? $this->error['coingate_api_key'] : '';
+        $data['api_secret_error']             = isset($this->error['coingate_api_secret']) ? $this->error['coigate_api_secret'] : '';
+        $data['receive_currency_error']       = isset($this->error['coingate_receive_currency']) ? $this->error['coingate_receive_currency'] : '';
+        $data['new_order_status_label']       = $this->language->get('new_order_status_label');
         $data['cancelled_order_status_label'] = $this->language->get('cancelled_order_status_label');
-        $data['expired_order_status_label'] = $this->language->get('expired_order_status_label');
-        $data['failed_order_status_label'] = $this->language->get('failed_order_status_label');
+        $data['expired_order_status_label']   = $this->language->get('expired_order_status_label');
+        $data['failed_order_status_label']    = $this->language->get('failed_order_status_label');
         $data['completed_order_status_label'] = $this->language->get('completed_order_status_label');
-        $data['sort_order_label'] = $this->language->get('sort_order_label');
-        $data['log_download_url'] = $this->url->link('payment/coingate/download_log', 'token=' . $this->session->data['token'], $this->config->get('config_secure'));
+        $data['sort_order_label']             = $this->language->get('sort_order_label');
+        $data['log_download_url']             = $this->url->link('payment/coingate/download_log', 'token=' . $this->session->data['token'], $this->config->get('config_secure'));
 
         $data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
@@ -199,17 +199,17 @@ class ControllerPaymentCoingate extends Controller
             $data['coingate_sort_order'] = $this->config->get('coingate_sort_order');
 
         $this->load->model('localisation/currency');
-        $currencies = $this->model_localisation_currency->getCurrencies();
+        $currencies         = $this->model_localisation_currency->getCurrencies();
         $data['currencies'] = array();
 
         foreach ($currencies as $key => $value) {
             $data['currencies'][] = strtolower($key);
         }
 
-        $this->template = 'payment/coingate.tpl';
-        $data['header'] = $this->load->controller('common/header');
+        $this->template      = 'payment/coingate.tpl';
+        $data['header']      = $this->load->controller('common/header');
         $data['column_left'] = $this->load->controller('common/column_left');
-        $data['footer'] = $this->load->controller('common/footer');
+        $data['footer']      = $this->load->controller('common/footer');
 
         $this->response->setOutput($this->load->view($this->template, $data));
     }
@@ -232,25 +232,21 @@ class ControllerPaymentCoingate extends Controller
             $this->error['coingate_receive_currency'] = $this->language->get('receive_currency_error');
 
         if (!$this->error) {
-            $coingate = new CoingateMerchant(
-                array(
-                    'app_id' => $this->request->post['coingate_app_id'],
-                    'api_key' => $this->request->post['coingate_api_key'],
-                    'api_secret' => $this->request->post['coingate_api_secret'],
-                    'mode' => $this->request->post['coingate_test'] == 1 ? 'sandbox' : 'live',
-                    'user_agent' => 'CoinGate - OpenCart Extension v' . COINGATE_OPENCART_EXTENSION_VERSION
-                )
+            $authentication = array(
+                'app_id'      => $this->request->post['coingate_app_id'],
+                'api_key'     => $this->request->post['coingate_api_key'],
+                'api_secret'  => $this->request->post['coingate_api_secret'],
+                'environment' => $this->request->post['coingate_test'] == 1 ? 'sandbox' : 'live',
+                'user_agent'  => 'CoinGate - OpenCart Extension v' . COINGATE_OPENCART_EXTENSION_VERSION
             );
 
-            if (!$coingate->test_connection()) {
-                $this->error['warning'] = ($coingate->status_code == 0 ? $this->language->get('curl_problem_error') : $this->language->get('coingate_connection_error'));
+            if (($test_connection = CoinGate::testConnection($authentication)) !== true) {
+                $this->error['warning'] = $this->language->get('coingate_connection_error');
 
                 $this->log->write(
                     '[Admin] Testing connection error'
                     . ' - App ID: ' . $this->request->post['coingate_app_id']
-                    . '; HTTP Status: ' . $coingate->status_code
-                    . '; Response: ' . $coingate->response
-                    . '; cURL Error: ' . json_encode($coingate->curl_error)
+                    . '; Exception: ' . $test_connection
                     . "\n");
             }
         }

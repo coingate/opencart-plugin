@@ -1,7 +1,9 @@
 <?php
 
+use CoinGate\CoinGate;
+
+require_once(DIR_SYSTEM . 'library/vendor/coingate/init.php');
 require_once(DIR_SYSTEM . 'library/vendor/coingate/version.php');
-require_once DIR_SYSTEM . 'library/vendor/coingate/coingate_merchant.class.php';
 
 class ControllerPaymentCoingate extends Controller
 {
@@ -10,6 +12,14 @@ class ControllerPaymentCoingate extends Controller
     {
         parent::__construct($registry);
 
+        CoinGate::config(array(
+            'app_id'      => $this->config->get('coingate_app_id'),
+            'api_key'     => $this->config->get('coingate_api_key'),
+            'api_secret'  => $this->config->get('coingate_api_secret'),
+            'environment' => $this->config->get('coingate_test') == 1 ? 'sandbox' : 'live',
+            'user_agent'  => 'CoinGate - OpenCart Extension v' . COINGATE_OPENCART_EXTENSION_VERSION
+        ));
+
         $this->load->language('payment/coingate');
         $this->log = new Log('coingate.log');
     }
@@ -17,7 +27,7 @@ class ControllerPaymentCoingate extends Controller
     public function index()
     {
         $data['button_confirm'] = $this->language->get('button_confirm');
-        $data['button_back'] = $this->language->get('button_back');
+        $data['button_back']    = $this->language->get('button_back');
 
         $data['confirm'] = $this->url->link('payment/coingate/confirm', '', $this->config->get('config_secure'));
 
@@ -36,8 +46,6 @@ class ControllerPaymentCoingate extends Controller
 
         $order = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
-        $coingate = $this->coingate_merchant();
-
         $token = $this->generate_token($order['order_id']);
 
         $description = array();
@@ -45,30 +53,26 @@ class ControllerPaymentCoingate extends Controller
             $description[] = $product['quantity'] . ' × ' . $product['name'];
         }
 
-        $coingate->create_order(array(
-            'order_id'         => $order['order_id'],
-            'price'            => number_format($order['total'], 2, '.', ''),
-            'currency'         => $order['currency_code'],
-            'receive_currency' => $this->config->get('coingate_receive_currency'),
-            'cancel_url'       => $this->url->link('payment/coingate/cancel', '', $this->config->get('config_secure')),
-            'callback_url'     => $this->url->link('payment/coingate/callback', '', $this->config->get('config_secure')) . '&cg_token=' . $token,
-            'success_url'      => $this->url->link('payment/coingate/accept', '', $this->config->get('config_secure')),
-            'title'            => $this->config->get('config_meta_title') . ' Order #' . $order['order_id'],
-            'description'      => join($description, ', ')
-        ));
+        try {
+            $order = \CoinGate\Merchant\Order::createOrFail(array(
+                'order_id'         => $order['order_id'],
+                'price'            => number_format($order['total'], 2, '.', ''),
+                'currency'         => $order['currency_code'],
+                'receive_currency' => $this->config->get('coingate_receive_currency'),
+                'cancel_url'       => $this->url->link('payment/coingate/cancel', '', $this->config->get('config_secure')),
+                'callback_url'     => $this->url->link('payment/coingate/callback', '', $this->config->get('config_secure')) . '&cg_token=' . $token,
+                'success_url'      => $this->url->link('payment/coingate/accept', '', $this->config->get('config_secure')),
+                'title'            => $this->config->get('config_meta_title') . ' Order #' . $order['order_id'],
+                'description'      => join($description, ', ')
+            ));
 
-        if ($coingate->success) {
-            $this->model_checkout_order->addOrderHistory($order['order_id'], $this->config->get('coingate_new_order_status_id'));
+            $this->model_checkout_order->addOrderHistory($order->order_id, $this->config->get('coingate_new_order_status_id'));
 
-            $coingate_response = json_decode($coingate->response, TRUE);
-
-            $this->response->redirect($coingate_response['payment_url']);
-        } else {
+            $this->response->redirect($order->payment_url);
+        } catch (Exception $e) {
             $this->log->write('[Catalog] Confirming order error'
                 . ' - App ID: ' . $this->config->get('coingate_app_id')
-                . '; HTTP Status: ' . $coingate->status_code
-                . '; Response: ' . $coingate->response
-                . '; cURL Error: ' . json_encode($coingate->curl_error)
+                . '; ' . get_class($e) . ': ' . $e->getMessage()
                 . "\n");
 
             $this->response->redirect($this->url->link('checkout/checkout', '', $this->config->get('config_secure')));
@@ -91,11 +95,11 @@ class ControllerPaymentCoingate extends Controller
 
     public function callback()
     {
-        $this->load->model('checkout/order');
-
-        $order = $this->model_checkout_order->getOrder($_REQUEST['order_id']);
-
         try {
+            $this->load->model('checkout/order');
+
+            $order = $this->model_checkout_order->getOrder($_REQUEST['order_id']);
+
             if (!$order || !$order['order_id']) {
                 throw new Exception('Order #' . $_REQUEST['order_id'] . ' does not exists');
             }
@@ -106,38 +110,24 @@ class ControllerPaymentCoingate extends Controller
                 throw new Exception('Token: ' . $_GET['cg_token'] . ' do not match');
             }
 
-            $coingate = $this->coingate_merchant();
+            $order = \CoinGate\Merchant\Order::findOrFail($_REQUEST['id']);
 
-            $coingate->get_order($_REQUEST['id']);
-
-            if (!$coingate->success) {
-                $this->log->write('[Catalog] Order callback error'
-                    . ' - App ID: ' . $this->config->get('coingate_app_id')
-                    . '; HTTP Status: ' . $coingate->status_code
-                    . '; Response: ' . $coingate->response
-                    . '; cURL Error: ' . json_encode($coingate->curl_error)
-                    . "\n");
-
-                throw new Exception('CoinGate Order Error. ' . $coingate->response);
-            }
-
-            $coingate_response = json_decode($coingate->response, TRUE);
-
-            if (!is_array($coingate_response)) {
-                throw new Exception('Something wrong with callback');
-            }
-
-            if ($coingate_response['status'] == 'paid') {
-                $this->model_checkout_order->addOrderHistory($order['order_id'], $this->config->get('coingate_completed_order_status_id'));
-            } elseif ($coingate_response['status'] == 'canceled') {
-                $this->model_checkout_order->addOrderHistory($order['order_id'], $this->config->get('coingate_cancelled_order_status_id'));
-            } elseif ($coingate_response['status'] == 'expired') {
-                $this->model_checkout_order->addOrderHistory($order['order_id'], $this->config->get('coingate_expired_order_status_id'));
-            } elseif ($coingate_response['status'] == 'invalid') {
-                $this->model_checkout_order->addOrderHistory($order['order_id'], $this->config->get('coingate_failed_order_status_id'));
+            if ($order->status == 'paid') {
+                $this->model_checkout_order->addOrderHistory($order->order_id, $this->config->get('coingate_completed_order_status_id'));
+            } elseif ($order->status == 'canceled') {
+                $this->model_checkout_order->addOrderHistory($order->order_id, $this->config->get('coingate_cancelled_order_status_id'));
+            } elseif ($order->status == 'expired') {
+                $this->model_checkout_order->addOrderHistory($order->order_id, $this->config->get('coingate_expired_order_status_id'));
+            } elseif ($order->status == 'invalid') {
+                $this->model_checkout_order->addOrderHistory($order->order_id, $this->config->get('coingate_failed_order_status_id'));
             }
         } catch (Exception $e) {
-            echo get_class($e) . ': ' . $e->getMessage();
+            $this->log->write('[Catalog] Order callback error'
+                . ' - App ID: ' . $this->config->get('coingate_app_id')
+                . '; ' . get_class($e) . ': ' . $e->getMessage()
+                . "\n");
+
+            echo $e;
         }
     }
 
@@ -150,22 +140,10 @@ class ControllerPaymentCoingate extends Controller
     {
         if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/' . $template)) {
             return $this->config->get('config_template') . '/template/payment/' . $template;
-        } elseif(DIR_TEMPLATE . file_exists($this->config->get('config_template') . '/payment/' . $template)) {
+        } elseif (DIR_TEMPLATE . file_exists($this->config->get('config_template') . '/payment/' . $template)) {
             return $this->config->get('config_template') . '/payment/' . $template;
         } else {
             return 'default/template/payment/' . $template;
         }
-    }
-
-    private function coingate_merchant() {
-        return new CoingateMerchant(
-            array(
-                'app_id'        => $this->config->get('coingate_app_id'),
-                'api_key'       => $this->config->get('coingate_api_key'),
-                'api_secret'    => $this->config->get('coingate_api_secret'),
-                'mode'          => $this->config->get('coingate_test') == 1 ? 'sandbox' : 'live',
-                'user_agent'    => 'CoinGate - OpenCart Extension v' . COINGATE_OPENCART_EXTENSION_VERSION
-            )
-        );
     }
 }
