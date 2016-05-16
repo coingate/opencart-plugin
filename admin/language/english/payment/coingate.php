@@ -29,6 +29,7 @@ $_['cancelled_order_status_label'] = 'Cancelled Order Status:';
 $_['expired_order_status_label']   = 'Expired Order Status:';
 $_['failed_order_status_label']    = 'Failed Order Status:';
 $_['completed_order_status_label'] = 'Completed Order Status:';
+$_['refunded_order_status_label']  = 'Refunded Order Status:';
 $_['geo_zone_label']               = 'GEO Zone:';
 $_['sort_order_label']             = 'Sort Order:';
 $_['all_geo_zones_text']           = 'All GEO zones';

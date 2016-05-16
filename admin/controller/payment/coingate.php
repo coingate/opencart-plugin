@@ -115,6 +115,7 @@ class ControllerPaymentCoingate extends Controller
         $data['expired_order_status_label']   = $this->language->get('expired_order_status_label');
         $data['failed_order_status_label']    = $this->language->get('failed_order_status_label');
         $data['completed_order_status_label'] = $this->language->get('completed_order_status_label');
+        $data['refunded_order_status_label']  = $this->language->get('refunded_order_status_label');
         $data['sort_order_label']             = $this->language->get('sort_order_label');
         $data['log_download_url']             = $this->url->link('payment/coingate/download_log', 'token=' . $this->session->data['token'], $this->config->get('config_secure'));
 
@@ -141,75 +142,17 @@ class ControllerPaymentCoingate extends Controller
         $data['cancel'] = $this->url->link('extension/payment', 'token=' . $this->session->data['token'], $this->config->get('config_secure'));
 
 
-        if (isset($this->request->post['coingate_status']))
-            $data['coingate_status'] = $this->request->post['coingate_status'];
-        else
-            $data['coingate_status'] = $this->config->get('coingate_status');
+        $fields = array('coingate_status', 'coingate_app_id', 'coingate_api_key', 'coingate_api_secret', 'coingate_test',
+            'coingate_receive_currency', 'coingate_new_order_status_id', 'coingate_cancelled_order_status_id',
+            'coingate_expired_order_status_id', 'coingate_failed_order_status_id', 'coingate_completed_order_status_id',
+            'coingate_refunded_order_status_id', 'coingate_sort_order', 'coingate_total', 'coingate_geo_zone_id');
 
-        if (isset($this->request->post['coingate_app_id']))
-            $data['coingate_app_id'] = $this->request->post['coingate_app_id'];
-        else
-            $data['coingate_app_id'] = $this->config->get('coingate_app_id');
-
-        if (isset($this->request->post['coingate_api_key']))
-            $data['coingate_api_key'] = $this->request->post['coingate_api_key'];
-        else
-            $data['coingate_api_key'] = $this->config->get('coingate_api_key');
-
-        if (isset($this->request->post['coingate_api_secret']))
-            $data['coingate_api_secret'] = $this->request->post['coingate_api_secret'];
-        else
-            $data['coingate_api_secret'] = $this->config->get('coingate_api_secret');
-
-        if (isset($this->request->post['coingate_test']))
-            $data['coingate_test'] = $this->request->post['coingate_test'];
-        else
-            $data['coingate_test'] = $this->config->get('coingate_test');
-
-        if (isset($this->request->post['coingate_receive_currency']))
-            $data['coingate_receive_currency'] = $this->request->post['coingate_receive_currency'];
-        else
-            $data['coingate_receive_currency'] = $this->config->get('coingate_receive_currency');
-
-        if (isset($this->request->post['coingate_new_order_status_id']))
-            $data['coingate_new_order_status_id'] = $this->request->post['coingate_new_order_status_id'];
-        else
-            $data['coingate_new_order_status_id'] = $this->config->get('coingate_new_order_status_id');
-
-        if (isset($this->request->post['coingate_cancelled_order_status_id']))
-            $data['coingate_cancelled_order_status_id'] = $this->request->post['coingate_cancelled_order_status_id'];
-        else
-            $data['coingate_cancelled_order_status_id'] = $this->config->get('coingate_cancelled_order_status_id');
-
-        if (isset($this->request->post['coingate_expired_order_status_id']))
-            $data['coingate_expired_order_status_id'] = $this->request->post['coingate_expired_order_status_id'];
-        else
-            $data['coingate_expired_order_status_id'] = $this->config->get('coingate_expired_order_status_id');
-
-        if (isset($this->request->post['coingate_failed_order_status_id']))
-            $data['coingate_failed_order_status_id'] = $this->request->post['coingate_failed_order_status_id'];
-        else
-            $data['coingate_failed_order_status_id'] = $this->config->get('coingate_failed_order_status_id');
-
-        if (isset($this->request->post['coingate_completed_order_status_id']))
-            $data['coingate_completed_order_status_id'] = $this->request->post['coingate_completed_order_status_id'];
-        else
-            $data['coingate_completed_order_status_id'] = $this->config->get('coingate_completed_order_status_id');
-
-        if (isset($this->request->post['coingate_sort_order']))
-            $data['coingate_sort_order'] = $this->request->post['coingate_sort_order'];
-        else
-            $data['coingate_sort_order'] = $this->config->get('coingate_sort_order');
-
-        if (isset($this->request->post['coingate_total']))
-            $data['coingate_total'] = $this->request->post['coingate_total'];
-        else
-            $data['coingate_total'] = $this->config->get('coingate_total');
-
-        if (isset($this->request->post['coingate_geo_zone_id']))
-            $data['coingate_geo_zone_id'] = $this->request->post['coingate_geo_zone_id'];
-        else
-            $data['coingate_geo_zone_id'] = $this->config->get('coingate_geo_zone_id');
+        foreach ($fields as $field_name) {
+            if (isset($this->request->post[$field_name]))
+                $data[$field_name] = $this->request->post[$field_name];
+            else
+                $data[$field_name] = $this->config->get($field_name);
+        }
 
         $this->load->model('localisation/geo_zone');
         $data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();

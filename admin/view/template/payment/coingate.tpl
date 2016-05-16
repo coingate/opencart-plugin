@@ -267,6 +267,24 @@
         </div>
 
         <div class="form-group">
+          <label class="col-sm-2 control-label"
+                 for="refunded_completed_order_status_id"><?php echo $refunded_order_status_label; ?></label>
+
+          <div class="col-sm-10">
+            <select name="coingate_refunded_order_status_id" class="form-control">
+              <?php foreach ($order_statuses as $order_status) { ?>
+                <?php if ($order_status['order_status_id'] == $coingate_refunded_order_status_id) { ?>
+                <option value="<?php echo $order_status['order_status_id']; ?>"
+                        selected="selected"><?php echo $order_status['name']; ?></option>
+                <?php } else { ?>
+                <option value="<?php echo $order_status['order_status_id']; ?>"><?php echo $order_status['name']; ?></option>
+                <?php } ?>
+              <?php } ?>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
           <label class="col-sm-2 control-label" for="input-total">
             <span data-toggle="tooltip" title="<?php echo $help_total; ?>"><?php echo $entry_total; ?></span>
           </label>

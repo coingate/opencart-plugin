@@ -112,14 +112,28 @@ class ControllerPaymentCoingate extends Controller
 
             $order = \CoinGate\Merchant\Order::findOrFail($_REQUEST['id']);
 
-            if ($order->status == 'paid') {
-                $this->model_checkout_order->addOrderHistory($order->order_id, $this->config->get('coingate_completed_order_status_id'));
-            } elseif ($order->status == 'canceled') {
-                $this->model_checkout_order->addOrderHistory($order->order_id, $this->config->get('coingate_cancelled_order_status_id'));
-            } elseif ($order->status == 'expired') {
-                $this->model_checkout_order->addOrderHistory($order->order_id, $this->config->get('coingate_expired_order_status_id'));
-            } elseif ($order->status == 'invalid') {
-                $this->model_checkout_order->addOrderHistory($order->order_id, $this->config->get('coingate_failed_order_status_id'));
+            switch ($order->status) {
+                case 'paid':
+                    $cg_order_status = 'coingate_completed_order_status_id';
+                    break;
+                case 'canceled':
+                    $cg_order_status = 'coingate_cancelled_order_status_id';
+                    break;
+                case 'expired':
+                    $cg_order_status = 'coingate_expired_order_status_id';
+                    break;
+                case 'failed':
+                    $cg_order_status = 'coingate_expired_order_status_id';
+                    break;
+                case 'refunded':
+                    $cg_order_status = 'coingate_refunded_order_status_id';
+                    break;
+                default:
+                    $cg_order_status = NULL;
+            }
+
+            if (!is_null($cg_order_status)) {
+                $this->model_checkout_order->addOrderHistory($order->order_id, $this->config->get($cg_order_status));
             }
         } catch (Exception $e) {
             $this->log->write('[Catalog] Order callback error'
