@@ -103,6 +103,7 @@ class ControllerPaymentCoingate extends Controller
         $data['button_save']                  = $this->language->get('button_save');
         $data['button_cancel']                = $this->language->get('button_cancel');
         $data['entry_total']                  = $this->language->get('entry_total');
+        $data['help_total']                   = $this->language->get('help_total');
         $data['entry_geo_zone']               = $this->language->get('entry_geo_zone');
         $data['text_all_zones']               = $this->language->get('text_all_zones');
         $data['error_warning']                = isset($this->error['warning']) ? $this->error['warning'] : '';
