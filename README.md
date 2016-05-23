@@ -12,7 +12,7 @@ You can sign up for CoinGate account at https://coingate.com for production and 
 
 2. Download [coingate-opencart.ocmod.zip](https://github.com/coingate/opencart-plugin/releases/download/1.2.0/coingate-opencart.ocmod.zip)
 
-3. In admin panel, go to *Extensions » Extension Installer*. Click **Upload**, choose **coingate-opencart.ocmod.zip** from your computer, then click **Continue**.
+3. In admin panel, go to *Extensions » Extension Installer*. Click **Upload**, choose **coingate-opencart.ocmod.zip** from your computer, then click **Continue** (if the upload gets stuck half way, please check [this page](http://www.opencart.com/index.php?route=extension/extension/info&extension_id=18892) for solutions).
 
 4. Enable CoinGate payment extension: in admin panel, go to *Extensions » Payments* find **Bitcoin via CoinGate** and click **Install** button.
  
