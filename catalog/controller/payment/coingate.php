@@ -136,8 +136,8 @@ class ControllerPaymentCoingate extends Controller
         case 'expired':
           $cg_order_status = 'coingate_expired_order_status_id';
           break;
-        case 'failed':
-          $cg_order_status = 'coingate_expired_order_status_id';
+        case 'invalid':
+          $cg_order_status = 'coingate_failed_order_status_id';
           break;
         case 'refunded':
           $cg_order_status = 'coingate_refunded_order_status_id';
