@@ -21,15 +21,6 @@
 
   <div class="content">
     <div>
-      <div>
-        <b>Having trouble? We can help you!</b>
-        <a href="<?php echo $log_download_url; ?>" target="_blank">
-          Click here to generate the debug information
-        </a>
-        and send it to
-        <a href="mailto:support@coingate.com">support@coingate.com</a>
-      </div>
-
       <?php if(in_array('btc', $currencies)) { ?>
         <div>
             We noticed you're using BTC as Currency in your settings. Take a note that we can't convert BTC to EUR/USD.

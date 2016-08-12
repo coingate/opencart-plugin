@@ -26,7 +26,6 @@ class ControllerPaymentCoingate extends Controller
       'user_agent' => 'CoinGate - OpenCart '.$this->oc_version.' Extension v'.COINGATE_OPENCART_EXTENSION_VERSION,
     ));
 
-    $this->log = new Log('coingate.log');
     $this->oc_version = substr(VERSION, 0, 1);
   }
 
@@ -37,45 +36,6 @@ class ControllerPaymentCoingate extends Controller
     } else {
       return '-';
     }
-  }
-
-  public function download_log()
-  {
-    if ($this->oc_version == '1') {
-      $this->load->model('setting/extension');
-      $model = $this->model_setting_extension;
-    } else {
-      $this->load->model('extension/extension');
-      $model = $this->model_extension_extension;
-    }
-
-    $this->load->model('localisation/currency');
-
-    echo '<pre>';
-
-    echo "# OpenCart Data:\n";
-    echo 'PHP Version: '.phpversion()."\n";
-    echo 'cURL Version: '.json_encode(curl_version())."\n";
-    echo 'OpenCart Version: '.VERSION."\n";
-    echo 'CoinGate Payment Plugin Version '.COINGATE_OPENCART_EXTENSION_VERSION."\n";
-    echo 'Installed Modules: '.implode(', ', $model->getInstalled('module'))."\n";
-    echo 'Installed Payments Methods: '.implode(', ', $model->getInstalled('payment'))."\n";
-    echo 'Installed Shipping Methods: '.implode(', ', $model->getInstalled('shipping'))."\n";
-    echo 'CoinGate APP ID: '.$this->config->get('coingate_app_id')."\n";
-    echo 'OpenCart CoinGate Plugin Environment: '.($this->config->get('coingate_test') == 1 ? 'Sandbox' : 'Live')."\n";
-    echo 'Connection with CoinGate: '.(CoinGate::testConnection() === true ? 'Success' : 'Error')."\n";
-    echo 'User Currencies: '.json_encode($this->model_localisation_currency->getCurrencies())."\n";
-    echo 'Receive Currency: '.$this->config->get('coingate_receive_currency')."\n";
-    echo 'New Order Status: '.$this->get_order_status_name($this->config->get('coingate_new_order_status_id'))."\n";
-    echo 'Cancelled Order Status: '.$this->get_order_status_name($this->config->get('coingate_cancelled_order_status_id'))."\n";
-    echo 'Expired Order Status: '.$this->get_order_status_name($this->config->get('coingate_expired_order_status_id'))."\n";
-    echo 'Failed Order Status: '.$this->get_order_status_name($this->config->get('coingate_failed_order_status_id'))."\n";
-    echo 'Completed Order Status: '.$this->get_order_status_name($this->config->get('coingate_completed_order_status_id'))."\n";
-
-    echo "\n# Error logs:\n";
-    readfile(DIR_LOGS.'coingate.log');
-
-    echo '</pre>';
   }
 
   public function index()
@@ -134,7 +94,6 @@ class ControllerPaymentCoingate extends Controller
     $data['completed_order_status_label'] = $this->language->get('completed_order_status_label');
     $data['refunded_order_status_label'] = $this->language->get('refunded_order_status_label');
     $data['sort_order_label'] = $this->language->get('sort_order_label');
-    $data['log_download_url'] = $this->url->link('payment/coingate/download_log', 'token='.$this->session->data['token'], $this->config->get('config_secure'));
 
     $data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
@@ -251,12 +210,6 @@ class ControllerPaymentCoingate extends Controller
 
       if (($test_connection = CoinGate::testConnection($authentication)) !== true) {
         $this->error['warning'] = $this->language->get('coingate_connection_error');
-
-        $this->log->write(
-        '[Admin] Testing connection error'
-        .' - App ID: '.$this->request->post['coingate_app_id']
-        .'; Exception: '.$test_connection
-        ."\n");
       }
     }
 

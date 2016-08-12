@@ -25,17 +25,6 @@
     </div>
 
     <div class="panel-body">
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="alert alert-info">
-            Having trouble? We can help you!
-            <a href="<?php echo $log_download_url; ?>" target="_blank">Click here to generate the debug information</a>
-            and send it to
-            <a href="mailto:support@coingate.com">support@coingate.com</a>
-          </div>
-        </div>
-      </div>
-
       <?php if(in_array('btc', $currencies)) { ?>
       <div class="row">
         <div class="col-sm-12">

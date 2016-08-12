@@ -22,7 +22,6 @@ class ControllerPaymentCoingate extends Controller
     ));
 
     $this->load->language('payment/coingate');
-    $this->log = new Log('coingate.log');
 
     $this->oc_version = substr(VERSION, 0, 1);
   }
@@ -87,11 +86,6 @@ class ControllerPaymentCoingate extends Controller
 
       $this->response->redirect($order->payment_url);
     } catch (Exception $e) {
-      $this->log->write('[Catalog] Confirming order error'
-        . ' - App ID: ' . $this->config->get('coingate_app_id')
-        . '; ' . get_class($e) . ': ' . $e->getMessage()
-        . "\n");
-
       $this->response->redirect($this->url->link('checkout/checkout', '', $this->config->get('config_secure')));
     }
   }
@@ -153,11 +147,6 @@ class ControllerPaymentCoingate extends Controller
           $this->model_checkout_order->addOrderHistory($order->order_id, $this->config->get($cg_order_status));
       }
     } catch (Exception $e) {
-      $this->log->write('[Catalog] Order callback error'
-        . ' - App ID: ' . $this->config->get('coingate_app_id')
-        . '; ' . get_class($e) . ': ' . $e->getMessage()
-        . "\n");
-
       echo $e;
     }
   }
