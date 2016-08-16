@@ -5,16 +5,15 @@ use CoinGate\CoinGate;
 require_once DIR_SYSTEM.'library/vendor/coingate/init.php';
 require_once DIR_SYSTEM.'library/vendor/coingate/version.php';
 
-class ControllerPaymentCoingate extends Controller
+class ControllerExtensionPaymentCoingate extends Controller
 {
   private $error = array();
-  private $oc_version = null;
 
   public function __construct($registry)
   {
     parent::__construct($registry);
 
-    $this->load->language('payment/coingate');
+    $this->load->language('extension/payment/coingate');
     $this->load->model('setting/setting');
     $this->load->model('localisation/order_status');
 
@@ -23,10 +22,8 @@ class ControllerPaymentCoingate extends Controller
       'api_key' => $this->config->get('coingate_api_key'),
       'api_secret' => $this->config->get('coingate_api_secret'),
       'environment' => $this->config->get('coingate_test') == 1 ? 'sandbox' : 'live',
-      'user_agent' => 'CoinGate - OpenCart '.$this->oc_version.' Extension v'.COINGATE_OPENCART_EXTENSION_VERSION,
+      'user_agent' => 'CoinGate - OpenCart v'.VERSION.' Extension v'.COINGATE_OPENCART_EXTENSION_VERSION,
     ));
-
-    $this->oc_version = substr(VERSION, 0, 1);
   }
 
   private function get_order_status_name($order_status_id)
@@ -47,17 +44,12 @@ class ControllerPaymentCoingate extends Controller
         $this->load->model('setting/setting');
         $this->model_setting_setting->editSetting('coingate', $this->request->post);
         $this->session->data['success'] = $this->language->get('success_text');
-        $this->response->redirect($this->url->link('extension/payment', 'token='.$this->session->data['token'], $this->config->get('config_secure')));
+        $this->response->redirect($this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=payment', $this->config->get('config_secure')));
       }
     }
 
-    if ($this->oc_version == '1') {
-      $this->load->model('setting/extension');
-      $model = $this->model_setting_extension;
-    } else {
-      $this->load->model('extension/extension');
-      $model = $this->model_extension_extension;
-    }
+    $this->load->model('extension/extension');
+    $model = $this->model_extension_extension;
 
     $data['iamtesting'] = implode(', ', $model->getInstalled('shipping'));
 
@@ -106,16 +98,16 @@ class ControllerPaymentCoingate extends Controller
 
     $data['breadcrumbs'][] = array(
       'text' => $this->language->get('payment_text'),
-      'href' => $this->url->link('extension/payment', 'token='.$this->session->data['token'], $this->config->get('config_secure')),
+      'href' => $this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=payment', $this->config->get('config_secure'))
     );
 
     $data['breadcrumbs'][] = array(
       'text' => $this->language->get('heading_title'),
-      'href' => $this->url->link('payment/coingate', 'token='.$this->session->data['token'], $this->config->get('config_secure')),
+      'href' => $this->url->link('extension/payment/coingate', 'token=' . $this->session->data['token'], $this->config->get('config_secure'))
     );
 
-    $data['action'] = $this->url->link('payment/coingate', 'token='.$this->session->data['token'], $this->config->get('config_secure'));
-    $data['cancel'] = $this->url->link('extension/payment', 'token='.$this->session->data['token'], $this->config->get('config_secure'));
+    $data['action'] = $this->url->link('extension/payment/coingate', 'token=' . $this->session->data['token'], $this->config->get('config_secure'));
+    $data['cancel'] = $this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=payment', $this->config->get('config_secure'));
 
     $statuses = array('new', 'cancelled', 'expired', 'failed', 'completed', 'refunded');
 
@@ -155,31 +147,18 @@ class ControllerPaymentCoingate extends Controller
       $data['currencies'][] = strtolower($key);
     }
 
-    if ($this->oc_version == '1') {
-      $this->template = 'payment/coingate_v1.tpl';
+    $this->template = 'payment/coingate.tpl';
 
-      $this->data = $data;
+    $data['header'] = $this->load->controller('common/header');
+    $data['column_left'] = $this->load->controller('common/column_left');
+    $data['footer'] = $this->load->controller('common/footer');
 
-      $this->children = array(
-        'common/header',
-        'common/footer',
-      );
-
-      $this->response->setOutput($this->render(true), $this->config->get('config_compression'));
-    } else {
-      $this->template = 'payment/coingate_v2.tpl';
-
-      $data['header'] = $this->load->controller('common/header');
-      $data['column_left'] = $this->load->controller('common/column_left');
-      $data['footer'] = $this->load->controller('common/footer');
-
-      $this->response->setOutput($this->load->view($this->template, $data));
-    }
+    $this->response->setOutput($this->load->view($this->template, $data));
   }
 
   private function validate()
   {
-    if (!$this->user->hasPermission('modify', 'payment/coingate')) {
+    if (!$this->user->hasPermission('modify', 'extension/payment/coingate')) {
       $this->error['warning'] = $this->language->get('error_permission');
     }
 
@@ -205,7 +184,7 @@ class ControllerPaymentCoingate extends Controller
         'api_key' => $this->request->post['coingate_api_key'],
         'api_secret' => $this->request->post['coingate_api_secret'],
         'environment' => $this->request->post['coingate_test'] == 1 ? 'sandbox' : 'live',
-        'user_agent' => 'CoinGate - OpenCart Extension v'.COINGATE_OPENCART_EXTENSION_VERSION,
+        'user_agent' => 'CoinGate - OpenCart v'.VERSION.' Extension v'.COINGATE_OPENCART_EXTENSION_VERSION,
       );
 
       if (($test_connection = CoinGate::testConnection($authentication)) !== true) {
