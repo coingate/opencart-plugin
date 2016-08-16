@@ -47,7 +47,7 @@ class ControllerPaymentCoingate extends Controller
         $this->load->model('setting/setting');
         $this->model_setting_setting->editSetting('coingate', $this->request->post);
         $this->session->data['success'] = $this->language->get('success_text');
-        $this->response->redirect($this->url->link('extension/payment', 'token='.$this->session->data['token'], $this->config->get('config_secure')));
+        $this->response->redirect($this->make_link('extension/payment'));
       }
     }
 
@@ -101,21 +101,21 @@ class ControllerPaymentCoingate extends Controller
 
     $data['breadcrumbs'][] = array(
       'text' => $this->language->get('home_text'),
-      'href' => $this->url->link('common/dashboard', 'token='.$this->session->data['token'], $this->config->get('config_secure')),
+      'href' => $this->make_link('common/dashboard'),
     );
 
     $data['breadcrumbs'][] = array(
       'text' => $this->language->get('payment_text'),
-      'href' => $this->url->link('extension/payment', 'token='.$this->session->data['token'], $this->config->get('config_secure')),
+      'href' => $this->make_link('extension/payment'),
     );
 
     $data['breadcrumbs'][] = array(
       'text' => $this->language->get('heading_title'),
-      'href' => $this->url->link('payment/coingate', 'token='.$this->session->data['token'], $this->config->get('config_secure')),
+      'href' => $this->make_link('payment/coingate'),
     );
 
-    $data['action'] = $this->url->link('payment/coingate', 'token='.$this->session->data['token'], $this->config->get('config_secure'));
-    $data['cancel'] = $this->url->link('extension/payment', 'token='.$this->session->data['token'], $this->config->get('config_secure'));
+    $data['action'] = $this->make_link('payment/coingate');
+    $data['cancel'] = $this->make_link('extension/payment');
 
     $statuses = array('new', 'cancelled', 'expired', 'failed', 'completed', 'refunded');
 
@@ -214,5 +214,13 @@ class ControllerPaymentCoingate extends Controller
     }
 
     return !$this->error;
+  }
+
+  function make_link($path) {
+    if ($this->oc_version == '1') {
+      ($this->config->get('config_secure') ? HTTPS_SERVER : HTTP_SERVER) . 'index.php?route='.$path.'&token=' . $this->session->data['token'];
+    } else {
+      $this->url->link($path, 'token='.$this->session->data['token'], $this->config->get('config_secure'));
+    }
   }
 }
