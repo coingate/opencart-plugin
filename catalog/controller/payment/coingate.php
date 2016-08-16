@@ -18,7 +18,7 @@ class ControllerPaymentCoingate extends Controller
       'api_key'     => $this->config->get('coingate_api_key'),
       'api_secret'  => $this->config->get('coingate_api_secret'),
       'environment' => $this->config->get('coingate_test') == 1 ? 'sandbox' : 'live',
-      'user_agent'  => 'CoinGate - OpenCart Extension v' . COINGATE_OPENCART_EXTENSION_VERSION
+      'user_agent'  => 'CoinGate - OpenCart v'.VERSION.' Extension v' . COINGATE_OPENCART_EXTENSION_VERSION
     ));
 
     $this->load->language('payment/coingate');
