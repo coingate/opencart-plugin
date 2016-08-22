@@ -218,9 +218,9 @@ class ControllerPaymentCoingate extends Controller
 
   function make_link($path) {
     if ($this->oc_version == '1') {
-      ($this->config->get('config_secure') ? HTTPS_SERVER : HTTP_SERVER) . 'index.php?route='.$path.'&token=' . $this->session->data['token'];
+      return ($this->config->get('config_secure') ? HTTPS_SERVER : HTTP_SERVER) . 'index.php?route='.$path.'&token=' . $this->session->data['token'];
     } else {
-      $this->url->link($path, 'token='.$this->session->data['token'], $this->config->get('config_secure'));
+      return $this->url->link($path, 'token='.$this->session->data['token'], $this->config->get('config_secure'));
     }
   }
 }
