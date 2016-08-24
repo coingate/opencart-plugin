@@ -124,7 +124,7 @@
         </tr>
 
         <tr>
-          <td><?php echo $new_order_status_label; ?> <?= $coingate_new_order_status_id; ?></td>
+          <td><?php echo $new_order_status_label; ?></td>
           <td>
             <select name="coingate_new_order_status_id">
               <?php foreach ($order_statuses as $order_status): ?>
@@ -143,7 +143,7 @@
         </tr>
 
         <tr>
-          <td><?php echo $cancelled_order_status_label; ?> <?= $coingate_cancelled_order_status_id; ?></td>
+          <td><?php echo $cancelled_order_status_label; ?></td>
           <td>
             <select name="coingate_cancelled_order_status_id">
               <?php foreach ($order_statuses as $order_status): ?>
