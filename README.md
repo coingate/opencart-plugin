@@ -28,4 +28,4 @@ You can sign up for CoinGate account at https://coingate.com for production and 
 
 4. Enable CoinGate payment extension: in admin panel, go to *Extensions » Payments* find **Bitcoin via CoinGate** and click **Install** button.
  
-5. Enter API Credentials (*App ID*, *Api Key*, *Api Secret*) and configure other extension settings: in admin panel, go to *Extensions » Payments* find **Bitcoin via CoinGate** and click **Edit** button. Don't forget to save.
+5. Enter [API Credentials](http://support.coingate.com/knowledge_base/topics/how-can-i-create-coingate-api-credentials) (*App ID*, *Api Key*, *Api Secret*) and configure other extension settings: in admin panel, go to *Extensions » Payments* find **Bitcoin via CoinGate** and click **Edit** button. Don't forget to save.
