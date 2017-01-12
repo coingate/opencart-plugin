@@ -50,25 +50,21 @@ class ControllerExtensionPaymentCoingate extends Controller
       $description[] = $product['quantity'] . ' × ' . $product['name'];
     }
 
-    try {
-      $order = \CoinGate\Merchant\Order::createOrFail(array(
-        'order_id'         => $order['order_id'],
-        'price'            => number_format($order['total'], 2, '.', ''),
-        'currency'         => $order['currency_code'],
-        'receive_currency' => $this->config->get('coingate_receive_currency'),
-        'cancel_url'       => $this->url->link('extension/payment/coingate/cancel', '', $this->config->get('config_secure')),
-        'callback_url'     => $this->url->link('extension/payment/coingate/callback', '', $this->config->get('config_secure')) . '&cg_token=' . $token,
-        'success_url'      => $this->url->link('extension/payment/coingate/accept', '', $this->config->get('config_secure')),
-        'title'            => $this->config->get('config_meta_title') . ' Order #' . $order['order_id'],
-        'description'      => join($description, ', ')
-      ));
+    $order = \CoinGate\Merchant\Order::createOrFail(array(
+      'order_id'         => $order['order_id'],
+      'price'            => number_format($order['total'], 2, '.', ''),
+      'currency'         => $order['currency_code'],
+      'receive_currency' => $this->config->get('coingate_receive_currency'),
+      'cancel_url'       => $this->url->link('extension/payment/coingate/cancel', '', $this->config->get('config_secure')),
+      'callback_url'     => $this->url->link('extension/payment/coingate/callback', '', $this->config->get('config_secure')) . '&cg_token=' . $token,
+      'success_url'      => $this->url->link('extension/payment/coingate/accept', '', $this->config->get('config_secure')),
+      'title'            => $this->config->get('config_meta_title') . ' Order #' . $order['order_id'],
+      'description'      => join($description, ', ')
+    ));
 
-      $this->model_checkout_order->addOrderHistory($order->order_id, $this->config->get('coingate_new_order_status_id'));
+    $this->model_checkout_order->addOrderHistory($order->order_id, $this->config->get('coingate_new_order_status_id'));
 
-      $this->response->redirect($order->payment_url);
-    } catch (Exception $e) {
-      $this->response->redirect($this->url->link('checkout/checkout', '', $this->config->get('config_secure')));
-    }
+    $this->response->redirect($order->payment_url);
   }
 
   public function accept()
