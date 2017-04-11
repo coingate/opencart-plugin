@@ -24,16 +24,16 @@ Please note, that for "Test" mode you **must** generate separate API credentials
 
 1. Check OpenCart FTP configuration in Admin panel: *System » Settings* click **Edit** button and click **FTP** tab. Enter *FTP Host*, *Port*, *Username*, *Password*, *Root directory (FTP Root)*. In **Enable FTP** choose *Yes* radio button. Don't forget to save.
 
-2. Download: 
+2. Download:
   * For **OpenCart 2.0 - 2.2** version: [coingate-opencart.ocmod.zip](https://github.com/coingate/opencart-plugin/releases/download/v1.3.0/coingate-opencart.ocmod.zip)
-  * For **OpenCart >= 2.3** version: [coingate-opencart.ocmod.zip](https://github.com/coingate/opencart-plugin/releases/download/v2.0.0/coingate-opencart.ocmod.zip)
+  * For **OpenCart >= 2.3** version: [coingate-opencart.ocmod.zip](https://github.com/coingate/opencart-plugin/releases/download/v2.0.1/coingate-opencart.ocmod.zip)
 
 3. In admin panel, go to *Extensions » Extension Installer*. Click **Upload**, choose **coingate-opencart.ocmod.zip** from your computer, then click **Continue** (if the upload gets stuck half way, please check [this page](http://www.opencart.com/index.php?route=extension/extension/info&extension_id=18892) for solutions).
 
 4. Enable CoinGate payment extension:
  * For **OpenCart 2.0 - 2.2** version: in admin panel, go to *Extensions » Payments* find **Bitcoin via CoinGate** and click **Install** button.
  * For **OpenCart >= 2.3** version: in admin panel, go to *Extensions*, from dropdown form choose *Payments*, find **Bitcoin via CoinGate** and click **Install** button.
- 
+
 5. Enter [API Credentials](http://support.coingate.com/knowledge_base/topics/how-can-i-create-coingate-api-credentials) (*App ID*, *Api Key*, *Api Secret*) and configure other extension settings:
   * For **OpenCart 2.0 - 2.2** version: in admin panel, go to *Extensions » Payments* find **Bitcoin via CoinGate** and click **Edit** button. Don't forget to save.
   * For **OpenCart >= 2.3** version: in admin panel, go to *Extensions*, from dropdown form choose *Payments*, find **Bitcoin via CoinGate** and click **Edit** button. Don't forget to save.
