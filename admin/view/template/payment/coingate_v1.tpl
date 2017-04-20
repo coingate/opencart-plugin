@@ -98,6 +98,13 @@
                             <option value="1" selected="selected"><?php echo $test_on; ?></option>
                             <?php endif;?>
                         </select>
+                        <p>
+                            Enable "test mode" to test on <a href="https://sandbox.coingate.com/"
+                                                             target="_blank">sandbox.coingate.com</a>.
+                            Please note, that for "Test" mode you must generate separate API credentials on
+                            sandbox.coingate.com. API credentials generated on coingate.com will not work for "Test"
+                            mode.
+                        </p>
                     </td>
                 </tr>
 
@@ -116,6 +123,12 @@
                         <?php if ($receive_currency_error): ?>
                         <span class="error"><?php echo $receive_currency_error; ?></span>
                         <?php endif; ?>
+
+                        <p>
+                            Currency you want to receive when making withdrawal at CoinGate. Please take a note what if
+                            you choose EUR or USD you will be asked to verify your business before making a withdrawal
+                            at CoinGate.
+                        </p>
                     </td>
                 </tr>
 

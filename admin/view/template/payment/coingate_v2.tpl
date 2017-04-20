@@ -25,6 +25,10 @@
         </div>
 
         <div class="panel-body">
+            <div class="alert alert-info">
+                Plugin not working? View <a href="https://developer.coingate.com/docs/issues" target="_blank">common issues</a> or contact <a href="mailto:support@coingate.com">support@coingate.com</a>
+            </div>
+
             <?php if(in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'))) { ?>
             <div class="row">
                 <div class="col-sm-12">
@@ -126,6 +130,9 @@
                         <div class="help-block">
                             Enable "test mode" to test on <a href="https://sandbox.coingate.com/"
                                                              target="_blank">sandbox.coingate.com</a>.
+                            Please note, that for "Test" mode you must generate separate API credentials on
+                            sandbox.coingate.com. API credentials generated on coingate.com will not work for "Test"
+                            mode.
                         </div>
                     </div>
                 </div>
@@ -144,7 +151,9 @@
                         </select>
 
                         <div class="help-block">
-                            Currency you want to receive at CoinGate.com
+                            Currency you want to receive when making withdrawal at CoinGate. Please take a note what if
+                            you choose EUR or USD you will be asked to verify your business before making a withdrawal
+                            at CoinGate.
                         </div>
                     </div>
 
