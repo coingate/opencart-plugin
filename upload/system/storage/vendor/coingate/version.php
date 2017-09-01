@@ -1,0 +1,3 @@
+<?php
+
+define('COINGATE_OPENCART_EXTENSION_VERSION', '3.0.0');

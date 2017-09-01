@@ -1,0 +1,251 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-payment" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    {% if error_warning %}
+      <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+      </div>
+    {% endif %}
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-payment" class="form-horizontal">
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+            <div class="col-sm-10">
+              <select name="payment_coingate_status" id="input-status" class="form-control">
+                {% if payment_coingate_status %}
+                  <option value="1" selected="selected">{{ text_enabled }}</option>
+                  <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                  <option value="1">{{ text_enabled }}</option>
+                  <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-app-id">{{ entry_app_id }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="payment_coingate_app_id" value="{{ payment_coingate_app_id }}" placeholder="{{ entry_app_id }}" id="input-app-id" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-api-key">{{ entry_api_key }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="payment_coingate_api_key" value="{{ payment_coingate_api_key }}" placeholder="{{ entry_api_key }}" id="input-api-key" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-api-secret">{{ entry_api_secret }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="payment_coingate_api_secret" value="{{ payment_coingate_api_secret }}" placeholder="{{ entry_api_secret }}" id="input-api-secret" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-test-mode">{{ entry_test_mode }}</label>
+            <div class="col-sm-10">
+              <select name="payment_coingate_test_mode" id="input-test-mode" class="form-control">
+                {% if payment_coingate_test_mode %}
+                <option value="1" selected="selected">{{ text_test_mode_on }}</option>
+                <option value="0">{{ text_test_mode_off }}</option>
+                {% else %}
+                <option value="1">{{ text_test_mode_on }}</option>
+                <option value="0" selected="selected">{{ text_test_mode_off }}</option>
+                {% endif %}
+              </select>
+
+              <div class="help-block">
+                {{ help_test_mode }}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-receive-currency">{{ entry_receive_currency }}</label>
+            <div class="col-sm-10">
+              <select name="payment_coingate_receive_currency" id="input-receive-currency" class="form-control">
+                {% for currency in receive_currencies %}
+                {% if currency == payment_coingate_receive_currency %}
+                <option value="{{ currency }}" selected="selected">{{ currency }}</option>
+                {% else %}
+                <option value="{{ currency }}">{{ currency }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+              <div class="help-block">{{ help_receive_currency }}</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-order-status">{{ entry_order_status }}</label>
+            <div class="col-sm-10">
+              <select name="payment_coingate_order_status_id" id="input-order-status" class="form-control">
+                {% for order_status in order_statuses %}
+                {% if order_status.order_status_id == payment_coingate_order_status_id %}
+                <option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
+                {% else %}
+                <option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-pending-status">{{ entry_pending_status }}</label>
+            <div class="col-sm-10">
+              <select name="payment_coingate_pending_status_id" id="input-pending-status" class="form-control">
+                {% for order_status in order_statuses %}
+                {% if order_status.order_status_id == payment_coingate_pending_status_id %}
+                <option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
+                {% else %}
+                <option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-confirming-status">{{ entry_confirming_status }}</label>
+            <div class="col-sm-10">
+              <select name="payment_coingate_confirming_status_id" id="input-pending-status" class="form-control">
+                {% for order_status in order_statuses %}
+                {% if order_status.order_status_id == payment_coingate_confirming_status_id %}
+                <option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
+                {% else %}
+                <option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-paid-status">{{ entry_paid_status }}</label>
+            <div class="col-sm-10">
+              <select name="payment_coingate_paid_status_id" id="input-paid-status" class="form-control">
+                {% for order_status in order_statuses %}
+                {% if order_status.order_status_id == payment_coingate_paid_status_id %}
+                <option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
+                {% else %}
+                <option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-invalid-status">{{ entry_invalid_status }}</label>
+            <div class="col-sm-10">
+              <select name="payment_coingate_invalid_status_id" id="input-invalid-status" class="form-control">
+                {% for order_status in order_statuses %}
+                {% if order_status.order_status_id == payment_coingate_invalid_status_id %}
+                <option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
+                {% else %}
+                <option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-expired-status">{{ entry_expired_status }}</label>
+            <div class="col-sm-10">
+              <select name="payment_coingate_expired_status_id" id="input-expired-status" class="form-control">
+                {% for order_status in order_statuses %}
+                {% if order_status.order_status_id == payment_coingate_expired_status_id %}
+                <option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
+                {% else %}
+                <option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-canceled-status">{{ entry_canceled_status }}</label>
+            <div class="col-sm-10">
+              <select name="payment_coingate_canceled_status_id" id="input-canceled-status" class="form-control">
+                {% for order_status in order_statuses %}
+                {% if order_status.order_status_id == payment_coingate_canceled_status_id %}
+                <option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
+                {% else %}
+                <option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-refunded-status">{{ entry_refunded_status }}</label>
+            <div class="col-sm-10">
+              <select name="payment_coingate_refunded_status_id" id="input-refunded-status" class="form-control">
+                {% for order_status in order_statuses %}
+                {% if order_status.order_status_id == payment_coingate_refunded_status_id %}
+                <option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
+                {% else %}
+                <option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-total"><span data-toggle="tooltip" title="{{ help_total }}">{{ entry_total }}</span></label>
+            <div class="col-sm-10">
+              <input type="text" name="payment_coingate_total" value="{{ payment_coingate_total }}" placeholder="{{ entry_total }}" id="input-total" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="input-geo-zone">{{ entry_geo_zone }}</label>
+            <div class="col-sm-10">
+              <select name="payment_coingate_geo_zone_id" id="input-geo-zone" class="form-control">
+                <option value="0">{{ text_all_zones }}</option>
+                {% for geo_zone in geo_zones %}
+                {% if geo_zone.geo_zone_id == payment_coingate_geo_zone_id %}
+                <option value="{{ geo_zone.geo_zone_id }}" selected="selected">{{ geo_zone.name }}</option>
+                {% else %}
+                <option value="{{ geo_zone.geo_zone_id }}">{{ geo_zone.name }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{{ footer }}
