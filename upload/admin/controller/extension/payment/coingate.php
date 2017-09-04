@@ -1,6 +1,6 @@
 <?php
 
-require_once(DIR_SYSTEM . '/storage/vendor/coingate/coingate-php/init.php');
+require_once(DIR_SYSTEM . 'library/coingate/coingate-php/init.php');
 
 class ControllerExtensionPaymentCoingate extends Controller {
   private $error = array();

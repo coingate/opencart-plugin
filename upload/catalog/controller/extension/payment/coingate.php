@@ -1,7 +1,7 @@
 <?php
 
-require_once(DIR_SYSTEM . '/storage/vendor/coingate/coingate-php/init.php');
-require_once(DIR_SYSTEM . '/storage/vendor/coingate/version.php');
+require_once(DIR_SYSTEM . 'library/coingate/coingate-php/init.php');
+require_once(DIR_SYSTEM . 'library/coingate/version.php');
 
 class ControllerExtensionPaymentCoingate extends Controller {
   public function index() {
