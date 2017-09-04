@@ -12,6 +12,16 @@ Sign up for CoinGate account at <https://coingate.com> for production and <https
 
 Please note, that for "Test" mode you **must** generate separate API credentials on <https://sandbox.coingate.com>. API credentials generated on <https://coingate.com> will **not** work for "Test" mode.
 
+### For OpenCart 3.* version
+
+1. Download https://github.com/coingate/opencart-plugin/releases/download/v3.0.0/coingate-opencart.ocmod.zip
+2. Go to Extensions » Installer and upload coingate-opencart.ocmod.zip
+3. Go to Extensions » Extensions and from dropdown choose Payments.
+4. Find CoinGate and click Install button.
+5. In same list find CoinGate and click Edit button.
+6. Enter [API Credentials](http://support.coingate.com/knowledge_base/topics/how-can-i-create-coingate-api-credentials) (*App ID*, *Api Key*, *Api Secret*) and configure other extension settings.
+7. Don't forget to save.
+
 ### For OpenCart 2.* version
 
 1. Check OpenCart FTP configuration in Admin panel: *System » Settings* click **Edit** button and click **FTP** tab. Enter *FTP Host*, *Port*, *Username*, *Password*, *Root directory (FTP Root)*. In **Enable FTP** choose *Yes* radio button. Don't forget to save.
