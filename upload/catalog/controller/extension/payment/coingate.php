@@ -30,7 +30,7 @@ class ControllerExtensionPaymentCoingate extends Controller {
 
     $cg_order = \CoinGate\Merchant\Order::create(array(
       'order_id'          => $order_info['order_id'],
-      'price'             => number_format($order_info['total'] * $this->currency->getvalue($order_info['currency_code']), 2, '.', ''),
+      'price'             => number_format($order_info['total'] * $this->currency->getvalue($order_info['currency_code']), 8, '.', ''),
       'currency'          => $order_info['currency_code'],
       'receive_currency'  => $this->config->get('payment_coingate_receive_currency'),
       'cancel_url'        => $this->url->link('extension/payment/coingate/cancel', '', true),
