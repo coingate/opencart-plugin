@@ -28,7 +28,7 @@ Please note, that for "Test" mode you **must** generate separate API credentials
 
 2. Download:
   * For **OpenCart 2.0 - 2.2** version: <https://github.com/coingate/opencart-plugin/releases/download/v1.3.3/coingate-opencart.ocmod.zip>
-  * For **OpenCart 2.3.*** version: <https://github.com/coingate/opencart-plugin/releases/download/v2.0.2/coingate-opencart.ocmod.zip>
+  * For **OpenCart 2.3.*** version: <https://github.com/coingate/opencart-plugin/releases/download/v2.0.3/coingate-opencart.ocmod.zip>
 
 3. In admin panel, go to *Extensions » Extension Installer*. Click **Upload**, choose **coingate-opencart.ocmod.zip** from your computer, then click **Continue** (if the upload gets stuck half way, please check [this page](http://www.opencart.com/index.php?route=extension/extension/info&extension_id=18892) for solutions).
 
