@@ -49,40 +49,14 @@
 
                 <tr>
                     <td>
-                        <span class="required">*</span> <?php echo $app_id_label; ?>
+                        <span class="required">*</span> <?php echo $api_auth_token_label; ?>
                     </td>
                     <td>
-                        <input type="text" name="coingate_app_id" value="<?php echo $coingate_app_id; ?>"/>
+                        <input type="text" name="coingate_api_auth_token" value="<?php echo $coingate_api_auth_token; ?>"/>
                         <br/>
-                        <?php if ($app_id_error): ?>
-                        <span class="error"><?php echo $app_id_error; ?></span>
-                        <?php endif; ?>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <span class="required">*</span> <?php echo $api_key_label; ?>
-                    </td>
-                    <td>
-                        <input type="text" name="coingate_api_key" value="<?php echo $coingate_api_key; ?>"/>
-                        <br/>
-                        <?php if ($api_key_error): ?>
-                        <span class="error"><?php echo $api_key_error; ?></span>
-                        <?php endif; ?>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <span class="required">*</span> <?php echo $api_secret_label; ?>
-                    </td>
-                    <td>
-                        <input type="text" name="coingate_api_secret" value="<?php echo $coingate_api_secret; ?>"/>
-                        <br/>
-                        <?php if ($api_secret_error): ?>
-                        <span class="error"><?php echo $api_secret_error; ?></span>
-                        <?php endif; ?>
+                        <?php if ($api_auth_token_error) { ?>
+                        <span class="error"><?php echo $api_auth_token_error; ?></span>
+                        <?php } ?>
                     </td>
                 </tr>
 

@@ -33,6 +33,3 @@ class ModelPaymentCoingate extends Model
         return $method_data;
     }
 }
-
-
-
