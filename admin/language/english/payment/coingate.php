@@ -1,6 +1,6 @@
 <?php
 
-$_['heading_title']                = 'Bitcoin via CoinGate';
+$_['heading_title']                = 'Cryptocurrency Payments via CoinGate';
 $_['test_on']                      = 'On';
 $_['test_off']                     = 'Off';
 $_['status_on']                    = 'Enable';
@@ -8,7 +8,7 @@ $_['status_off']                   = 'Disable';
 $_['button_save']                  = 'Save';
 $_['button_cancel']                = 'Cancel';
 $_['eur_label']                    = 'Euros (€)';
-$_['usd_label']                    = 'US Dollars ($)';
+$_['usd_label']                    = 'U.S. Dollars ($)';
 $_['btc_label']                    = 'Bitcoin (฿)';
 $_['receive_currency_label']       = 'Receive Currency';
 $_['status_label']                 = 'Status';
@@ -34,6 +34,6 @@ $_['text_coingate']                = '<a href="https://coingate.com" target="_bl
 $_['coingate_connection_error']    = 'Cannot connect to CoinGate. Please check your API credentials.';
 $_['curl_problem_error']           = 'Something wrong with cURL. Please contact CoinGate support at <a href="mailto:support@coingate.com">support@coingate.com</a>';
 $_['entry_total']                  = 'Total';
-$_['help_total']                   = 'The checkout total the order must reach before this payment method becomes active';
+$_['help_total']                   = 'The total amount the order must reach before this payment method becomes active';
 $_['entry_geo_zone']               = 'Geo Zone';
 $_['text_all_zones']               = 'All GEO Zones';
