@@ -34,10 +34,9 @@
                 <div class="col-sm-12">
                     <div class="alert alert-warning">
                         <i class="fa fa-exclamation-circle"></i>
-                        We have noticed that you are using <i>localhost</i> to host your website. Please take note that
-                        we may not
-                        be able to send payment callback to localhost. You must make your website available from
-                        outside.
+                We have noticed that your website is hosted on <i>localhost</i>. Please note that we may
+                not
+                be able to send payment callback to localhost. You must make your website publicly accessible.
                     </div>
                 </div>
             </div>
@@ -102,11 +101,10 @@
                         </select>
 
                         <div class="help-block">
-                            Enable "test mode" to test on <a href="https://sandbox.coingate.com/"
-                                                             target="_blank">sandbox.coingate.com</a>.
-                            Please note, that for "Test" mode you must generate separate API credentials on
-                            sandbox.coingate.com. API credentials generated on coingate.com will not work for "Test"
-                            mode.
+                            Enable "test mode" to test on <a href="https://sandbox.coingate.com/" target="_blank">Sandbox</a>.
+                            Please note that API credentials generated on coingate.com will not work for "Test"
+                            mode. For "Test" mode you must create a separate account on <a href="https://sandbox.coingate.com/"
+                            target="_blank">sandbox.coingate.com</a> and generate API credentials there.
                         </div>
                     </div>
                 </div>
@@ -125,9 +123,9 @@
                         </select>
 
                         <div class="help-block">
-                            Currency you want to receive when making withdrawal at CoinGate. Please take a note what if
-                            you choose EUR or USD you will be asked to verify your business before making a withdrawal
-                            at CoinGate.
+                            Choose the currency in which your payouts will be made (BTC, EUR or USD). For real-time EUR or USD settlements, 
+                            you must verify as a merchant on CoinGate. Do not forget to add your Bitcoin address or bank details for payouts 
+                            on <a href="https://coingate.com" target="_blank">your CoinGate account</a>.
                         </div>
                     </div>
 
