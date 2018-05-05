@@ -10,7 +10,7 @@ Full setup guide with screenshots is also available on our blog: <https://blog.c
 
 Sign up for CoinGate account at <https://coingate.com> for production and <https://sandbox.coingate.com> for testing (sandbox) environment.
 
-Please note, that for "Test" mode you **must** generate separate API credentials on <https://sandbox.coingate.com>. API credentials generated on <https://coingate.com> will **not** work for "Test" mode.
+Please note, that for "Test" mode you **must** generate separate API credentials (*Auth Token*) on <https://sandbox.coingate.com>. API credentials generated on <https://coingate.com> will **not** work for "Test" mode.
 
 Also note, that *Receive Currency* parameter in your module configuration window defines the currency of your settlements from CoinGate. Set it to BTC, EUR or USD, depending on how you wish to receive payouts. To receive settlements in **Euros** or **U.S. Dollars** to your bank, you have to verify as a merchant on CoinGate (login to your CoinGate account and click *Verification*). If you set your receive currency to **Bitcoin**, verification is not needed.
 
@@ -21,7 +21,7 @@ Also note, that *Receive Currency* parameter in your module configuration window
 3. Go to Extensions » Extensions and from dropdown choose Payments.
 4. Find CoinGate and click Install button.
 5. In same list find CoinGate and click Edit button.
-6. Enter [API Credentials](http://support.coingate.com/knowledge_base/topics/how-can-i-create-coingate-api-credentials) (*App ID*, *Api Key*, *Api Secret*) and configure other extension settings.
+6. Enter [API Credentials](http://support.coingate.com/knowledge_base/topics/how-can-i-create-coingate-api-credentials) (*Auth Token*) and configure other extension settings.
 7. Don't forget to save.
 
 ### For OpenCart 2.* version
@@ -35,12 +35,12 @@ Also note, that *Receive Currency* parameter in your module configuration window
 3. In admin panel, go to *Extensions » Extension Installer*. Click **Upload**, choose **coingate-opencart.ocmod.zip** from your computer, then click **Continue** (if the upload gets stuck half way, please check [this page](http://www.opencart.com/index.php?route=extension/extension/info&extension_id=18892) for solutions).
 
 4. Enable CoinGate payment extension:
- * For **OpenCart 2.0 - 2.2** version: in admin panel, go to *Extensions » Payments* find **Bitcoin via CoinGate** and click **Install** button.
- * For **OpenCart 2.3.*** version: in admin panel, go to *Extensions*, from dropdown form choose *Payments*, find **Bitcoin via CoinGate** and click **Install** button.
+ * For **OpenCart 2.0 - 2.2** version: in admin panel, go to *Extensions » Payments* find **Cryptocurrency Payments via CoinGate** and click **Install** button.
+ * For **OpenCart 2.3.*** version: in admin panel, go to *Extensions*, from dropdown form choose *Payments*, find **Cryptocurrency Payments via CoinGate** and click **Install** button.
 
-5. Enter [API Credentials](http://support.coingate.com/knowledge_base/topics/how-can-i-create-coingate-api-credentials) (*App ID*, *Api Key*, *Api Secret*) and configure other extension settings:
-  * For **OpenCart 2.0 - 2.2** version: in admin panel, go to *Extensions » Payments* find **Bitcoin via CoinGate** and click **Edit** button. Don't forget to save.
-  * For **OpenCart 2.3.*** version: in admin panel, go to *Extensions*, from dropdown form choose *Payments*, find **Bitcoin via CoinGate** and click **Edit** button. Don't forget to save.
+5. Enter [API Credentials](http://support.coingate.com/knowledge_base/topics/how-can-i-create-coingate-api-credentials) (*Auth Token*) and configure other extension settings:
+  * For **OpenCart 2.0 - 2.2** version: in admin panel, go to *Extensions » Payments* find **Cryptocurrency Payments via CoinGate** and click **Edit** button. Don't forget to save.
+  * For **OpenCart 2.3.*** version: in admin panel, go to *Extensions*, from dropdown form choose *Payments*, find **Cryptocurrency Payments via CoinGate** and click **Edit** button. Don't forget to save.
 
 
 ### For OpenCart 1.* version
