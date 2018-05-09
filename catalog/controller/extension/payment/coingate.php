@@ -12,9 +12,7 @@ class ControllerExtensionPaymentCoingate extends Controller
     parent::__construct($registry);
 
     CoinGate::config(array(
-      'app_id'      => $this->config->get('coingate_app_id'),
-      'api_key'     => $this->config->get('coingate_api_key'),
-      'api_secret'  => $this->config->get('coingate_api_secret'),
+      'auth_token' => empty($this->config->get('coingate_api_auth_token')) ? $this->config->get('coingate_api_secret') : $this->config->get('coingate_api_auth_token'),
       'environment' => $this->config->get('coingate_test') == 1 ? 'sandbox' : 'live',
       'user_agent'  => 'CoinGate - OpenCart v'.VERSION.' Extension v' . COINGATE_OPENCART_EXTENSION_VERSION
     ));
@@ -52,8 +50,8 @@ class ControllerExtensionPaymentCoingate extends Controller
 
     $order = \CoinGate\Merchant\Order::createOrFail(array(
       'order_id'         => $order['order_id'],
-      'price'            => number_format($order['total'] * $this->currency->getvalue($order['currency_code']), 2, '.', ''),
-      'currency'         => $order['currency_code'],
+      'price_amount'     => number_format($order['total'] * $this->currency->getvalue($order['currency_code']), 2, '.', ''),
+      'price_currency'   => $order['currency_code'],
       'receive_currency' => $this->config->get('coingate_receive_currency'),
       'cancel_url'       => $this->url->link('extension/payment/coingate/cancel', '', $this->config->get('config_secure')),
       'callback_url'     => $this->url->link('extension/payment/coingate/callback', '', $this->config->get('config_secure')) . '&cg_token=' . $token,

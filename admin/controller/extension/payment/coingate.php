@@ -18,9 +18,7 @@ class ControllerExtensionPaymentCoingate extends Controller
     $this->load->model('localisation/order_status');
 
     CoinGate::config(array(
-      'app_id' => $this->config->get('coingate_app_id'),
-      'api_key' => $this->config->get('coingate_api_key'),
-      'api_secret' => $this->config->get('coingate_api_secret'),
+      'auth_token' => empty($this->config->get('coingate_api_auth_token')) ? $this->config->get('coingate_api_secret') : $this->config->get('coingate_api_auth_token'),
       'environment' => $this->config->get('coingate_test') == 1 ? 'sandbox' : 'live',
       'user_agent' => 'CoinGate - OpenCart v'.VERSION.' Extension v'.COINGATE_OPENCART_EXTENSION_VERSION,
     ));
@@ -53,6 +51,8 @@ class ControllerExtensionPaymentCoingate extends Controller
 
     $data['iamtesting'] = implode(', ', $model->getInstalled('shipping'));
 
+    $data['api_auth_token_label'] = $this->language->get('api_auth_token_label');
+    $data['api_auth_token_error'] = isset($this->error['coingate_api_auth_token']) ? $this->error['coingate_api_auth_token'] : '';
     $data['heading_title'] = $this->language->get('heading_title');
     $data['status_off'] = $this->language->get('status_off');
     $data['status_on'] = $this->language->get('status_on');
@@ -62,10 +62,7 @@ class ControllerExtensionPaymentCoingate extends Controller
     $data['currencies_label']['eur'] = $this->language->get('eur_label');
     $data['currencies_label']['usd'] = $this->language->get('usd_label');
     $data['currencies_label']['btc'] = $this->language->get('btc_label');
-    $data['app_id_label'] = $this->language->get('app_id_label');
     $data['status_label'] = $this->language->get('status_label');
-    $data['api_key_label'] = $this->language->get('api_key_label');
-    $data['api_secret_label'] = $this->language->get('api_secret_label');
     $data['test_label'] = $this->language->get('test_label');
     $data['edit_text'] = $this->language->get('edit_text');
     $data['button_save'] = $this->language->get('button_save');
@@ -75,9 +72,6 @@ class ControllerExtensionPaymentCoingate extends Controller
     $data['entry_geo_zone'] = $this->language->get('entry_geo_zone');
     $data['text_all_zones'] = $this->language->get('text_all_zones');
     $data['error_warning'] = isset($this->error['warning']) ? $this->error['warning'] : '';
-    $data['app_id_error'] = isset($this->error['coingate_app_id']) ? $this->error['coingate_app_id'] : '';
-    $data['api_key_error'] = isset($this->error['coingate_api_key']) ? $this->error['coingate_api_key'] : '';
-    $data['api_secret_error'] = isset($this->error['coingate_api_secret']) ? $this->error['coingate_api_secret'] : '';
     $data['receive_currency_error'] = isset($this->error['coingate_receive_currency']) ? $this->error['coingate_receive_currency'] : '';
     $data['new_order_status_label'] = $this->language->get('new_order_status_label');
     $data['cancelled_order_status_label'] = $this->language->get('cancelled_order_status_label');
@@ -124,7 +118,7 @@ class ControllerExtensionPaymentCoingate extends Controller
     }
 
     $fields = array(
-      'coingate_status', 'coingate_app_id', 'coingate_api_key', 'coingate_api_secret', 'coingate_test',
+      'coingate_status', 'coingate_api_auth_token', 'coingate_test',
       'coingate_receive_currency', 'coingate_sort_order', 'coingate_total', 'coingate_geo_zone_id'
     );
 
@@ -158,20 +152,12 @@ class ControllerExtensionPaymentCoingate extends Controller
 
   private function validate()
   {
+    if (!$this->request->post['coingate_api_auth_token']) {
+      $this->error['coingate_api_auth_token'] = $this->language->get('api_auth_token_error');
+    }
+
     if (!$this->user->hasPermission('modify', 'extension/payment/coingate')) {
       $this->error['warning'] = $this->language->get('error_permission');
-    }
-
-    if (!$this->request->post['coingate_app_id']) {
-      $this->error['coingate_app_id'] = $this->language->get('app_id_error');
-    }
-
-    if (!$this->request->post['coingate_api_key']) {
-      $this->error['coingate_api_key'] = $this->language->get('api_key_error');
-    }
-
-    if (!$this->request->post['coingate_api_secret']) {
-      $this->error['coingate_api_secret'] = $this->language->get('api_secret_error');
     }
 
     if (!in_array($this->request->post['coingate_receive_currency'], array('eur', 'usd', 'btc'))) {
@@ -180,9 +166,7 @@ class ControllerExtensionPaymentCoingate extends Controller
 
     if (!$this->error) {
       $authentication = array(
-        'app_id' => $this->request->post['coingate_app_id'],
-        'api_key' => $this->request->post['coingate_api_key'],
-        'api_secret' => $this->request->post['coingate_api_secret'],
+        'auth_token' => $this->request->post['coingate_api_auth_token'],
         'environment' => $this->request->post['coingate_test'] == 1 ? 'sandbox' : 'live',
         'user_agent' => 'CoinGate - OpenCart v'.VERSION.' Extension v'.COINGATE_OPENCART_EXTENSION_VERSION,
       );

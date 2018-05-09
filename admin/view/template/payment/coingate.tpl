@@ -80,43 +80,17 @@
         </div>
 
         <div class="form-group required">
-          <label class="col-sm-2 control-label" for="coingate_app_id"><?php echo $app_id_label; ?></label>
+            <label class="col-sm-2 control-label" for="coingate_api_auth_token"><?php echo $api_auth_token_label; ?></label>
 
-          <div class="col-sm-10">
-            <input type="text" name="coingate_app_id" value="<?php echo $coingate_app_id; ?>"
-                   class="form-control">
+            <div class="col-sm-10">
+                <input type="text" name="coingate_api_auth_token" value="<?php echo $coingate_api_auth_token; ?>"
+                       class="form-control">
 
-            <?php if ($app_id_error) { ?>
-            <div class="text-danger"><?php echo $app_id_error; ?></div>
-            <?php } ?>
+                <?php if ($api_auth_token_error) { ?>
+                <div class="text-danger"><?php echo $api_auth_token_error; ?></div>
+                <?php } ?>
+            </div>
           </div>
-        </div>
-
-        <div class="form-group required">
-          <label class="col-sm-2 control-label" for="coingate_api_key"><?php echo $api_key_label; ?></label>
-
-          <div class="col-sm-10">
-            <input type="text" name="coingate_api_key" value="<?php echo $coingate_api_key; ?>"
-                   class="form-control">
-
-            <?php if ($api_key_error) { ?>
-            <div class="text-danger"><?php echo $api_key_error; ?></div>
-            <?php } ?>
-          </div>
-        </div>
-
-        <div class="form-group required">
-          <label class="col-sm-2 control-label"
-                 for="coingate_api_secret"><?php echo $api_secret_label; ?></label>
-
-          <div class="col-sm-10">
-            <input type="text" name="coingate_api_secret" value="<?php echo $coingate_api_secret; ?>"
-                   class="form-control">
-            <?php if ($api_secret_error) { ?>
-            <div class="text-danger"><?php echo $api_secret_error; ?></div>
-            <?php } ?>
-          </div>
-        </div>
 
         <div class="form-group">
           <label class="col-sm-2 control-label" for="coingate_test"><?php echo $test_label; ?></label>

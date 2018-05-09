@@ -5,21 +5,26 @@ class Exception
 {
     public static function formatError($error)
     {
-        $reason = '';
-        $message = '';
+        if (is_array($error)) {
+            $reason = '';
+            $message = '';
 
-        if (isset($error['reason']))
-            $reason = $error['reason'];
+            if (isset($error['reason']))
+                $reason = $error['reason'];
 
-        if (isset($error['message']))
-            $message = $error['message'];
+            if (isset($error['message']))
+                $message = $error['message'];
 
-        return "{$reason} {$message}";
+            return "{$reason} {$message}";
+        }
+        else {
+            return $error;
+        }
     }
 
     public static function throwException($http_status, $error)
     {
-        $reason = $error['reason'];
+        $reason = is_array($error) && isset($error['reason']) ? $error['reason'] : '';
 
         switch ($http_status) {
             case 400:
@@ -31,6 +36,9 @@ class Exception
             case 401:
                 switch ($reason) {
                     case 'BadCredentials': throw new BadCredentials(self::formatError($error));
+                    case 'BadAuthToken': throw new BadAuthToken(self::formatError($error));
+                    case 'AccountBlocked': throw new AccountBlocked(self::formatError($error));
+                    case 'IpAddressIsNotAllowed': throw new IpAddressIsNotAllowed(self::formatError($error));
                     default: throw new Unauthorized(self::formatError($error));
                 }
             case 404:
@@ -45,10 +53,12 @@ class Exception
                     case 'OrderIsNotValid': throw new OrderIsNotValid(self::formatError($error));
                     default: throw new UnprocessableEntity(self::formatError($error));
                 }
+            case 429:
+                throw new RateLimitException(self::formatError($error));
             case 500:
-                switch ($reason) {
-                    default: throw new InternalServerError(self::formatError($error));
-                }
+                throw new InternalServerError(self::formatError($error));
+            case 504:
+                throw new InternalServerError(self::formatError($error));
             default: throw new APIError(self::formatError($error));
         }
     }
