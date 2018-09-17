@@ -48,7 +48,7 @@ class ControllerExtensionPaymentCoingate extends Controller {
     $fields = array('payment_coingate_status', 'payment_coingate_api_auth_token', 'payment_coingate_api_secret',
       'payment_coingate_order_status_id', 'payment_coingate_pending_status_id', 'payment_coingate_confirming_status_id', 'payment_coingate_paid_status_id',
       'payment_coingate_invalid_status_id', 'payment_coingate_expired_status_id', 'payment_coingate_canceled_status_id', 'payment_coingate_refunded_status_id',
-      'payment_coingate_total', 'payment_coingate_geo_zone_id', 'payment_coingate_receive_currency', 'payment_coingate_test_mode');
+      'payment_coingate_total', 'payment_coingate_sort_order', 'payment_coingate_geo_zone_id', 'payment_coingate_receive_currency', 'payment_coingate_test_mode');
 
 
     foreach ($fields as $field) {
