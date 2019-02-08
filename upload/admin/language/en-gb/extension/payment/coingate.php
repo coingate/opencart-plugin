@@ -22,6 +22,7 @@ $_['entry_invalid_status'] = 'Invalid Status';
 $_['entry_expired_status'] = 'Expired Status';
 $_['entry_canceled_status'] = 'Canceled Status';
 $_['entry_refunded_status'] = 'Refunded Status';
+$_['entry_sort_order'] = 'Sort Order';
 
 $_['help_total'] = 'The checkout total the order must reach before this payment method becomes active.';
 $_['help_receive_currency'] = 'Currency you want to receive when making withdrawal at CoinGate. Please take a note what if you choose EUR or USD you will be asked to verify your business before making a withdrawal at CoinGate.';

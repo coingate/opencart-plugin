@@ -26,6 +26,7 @@ class ModelExtensionPaymentCoingate extends Model {
     $defaults['payment_coingate_canceled_status_id'] = 7;
     $defaults['payment_coingate_refunded_status_id'] = 11;
     $defaults['payment_coingate_receive_currency'] = "BTC";
+    $defaults['payment_coingate_sort_order'] = 0;
 
     $this->model_setting_setting->editSetting('payment_coingate', $defaults);
   }
