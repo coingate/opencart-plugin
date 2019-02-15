@@ -23,7 +23,7 @@ class ControllerExtensionPaymentCoingate extends Controller {
     $data['cancel']             = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true);
     $data['order_statuses']     = $this->model_localisation_order_status->getOrderStatuses();
     $data['geo_zones']          = $this->model_localisation_geo_zone->getGeoZones();
-    $data['receive_currencies'] = array('BTC', 'EUR', 'USD');
+    $data['receive_currencies'] = array('BTC', 'USDT', 'EUR', 'USD', 'DO_NOT_CONVERT');
 
     if (isset($this->error['warning'])) {
 			$data['error_warning'] = $this->error['warning'];
