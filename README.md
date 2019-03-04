@@ -16,7 +16,7 @@ Also note, that *Receive Currency* parameter in your module configuration window
 
 ### For OpenCart 3.* version
 
-1. Download <https://github.com/coingate/opencart-plugin/releases/download/v3.1.1/coingate-opencart.ocmod.zip>
+1. Download <https://github.com/coingate/opencart-plugin/releases/download/v3.1.2/coingate-opencart.ocmod.zip>
 2. Go to Extensions » Installer and upload coingate-opencart.ocmod.zip
 3. Go to Extensions » Extensions and from dropdown choose Payments.
 4. Find CoinGate and click Install button.
