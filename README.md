@@ -21,7 +21,7 @@ Also note, that *Receive Currency* parameter in your module configuration window
 3. Go to Extensions » Extensions and from dropdown choose Payments.
 4. Find CoinGate and click Install button.
 5. In same list find CoinGate and click Edit button.
-6. Enter [API Credentials](http://support.coingate.com/knowledge_base/topics/how-can-i-create-coingate-api-credentials) (*Auth Token*) and configure other extension settings.
+6. Enter [API Credentials](https://support.coingate.com/en/42/how-can-i-create-coingate-api-credentials) (*Auth Token*) and configure other extension settings.
 7. Don't forget to save.
 
 ### For OpenCart 2.* version
