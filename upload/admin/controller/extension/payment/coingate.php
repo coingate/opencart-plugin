@@ -17,13 +17,13 @@ class ControllerExtensionPaymentCoingate extends Controller {
 			$this->model_setting_setting->editSetting('payment_coingate', $this->request->post);
 			$this->session->data['success'] = $this->language->get('text_success');
 			$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true));
-		}
+    }
 
     $data['action']             = $this->url->link('extension/payment/coingate', 'user_token=' . $this->session->data['user_token'], true);
-		$data['cancel']             = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true);
+    $data['cancel']             = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true);
     $data['order_statuses']     = $this->model_localisation_order_status->getOrderStatuses();
     $data['geo_zones']          = $this->model_localisation_geo_zone->getGeoZones();
-    $data['receive_currencies'] = array('BTC', 'EUR', 'USD');
+    $data['receive_currencies'] = array('BTC', 'USDT', 'EUR', 'USD', 'DO_NOT_CONVERT');
 
     if (isset($this->error['warning'])) {
 			$data['error_warning'] = $this->error['warning'];
@@ -32,20 +32,20 @@ class ControllerExtensionPaymentCoingate extends Controller {
 		}
 
     $data['breadcrumbs'] = array();
-		$data['breadcrumbs'][] = array(
-			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
-		);
-		$data['breadcrumbs'][] = array(
-			'text' => $this->language->get('text_extension'),
-			'href' => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true)
-		);
-		$data['breadcrumbs'][] = array(
-			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('extension/payment/coingate', 'user_token=' . $this->session->data['user_token'], true)
-		);
+    $data['breadcrumbs'][] = array(
+        'text' => $this->language->get('text_home'),
+        'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
+    );
+    $data['breadcrumbs'][] = array(
+        'text' => $this->language->get('text_extension'),
+        'href' => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true)
+    );
+    $data['breadcrumbs'][] = array(
+        'text' => $this->language->get('heading_title'),
+        'href' => $this->url->link('extension/payment/coingate', 'user_token=' . $this->session->data['user_token'], true)
+    );
 
-    $fields = array('payment_coingate_status', 'payment_coingate_app_id', 'payment_coingate_api_key', 'payment_coingate_api_secret',
+    $fields = array('payment_coingate_status', 'payment_coingate_api_auth_token', 'payment_coingate_api_secret',
       'payment_coingate_order_status_id', 'payment_coingate_pending_status_id', 'payment_coingate_confirming_status_id', 'payment_coingate_paid_status_id',
       'payment_coingate_invalid_status_id', 'payment_coingate_expired_status_id', 'payment_coingate_canceled_status_id', 'payment_coingate_refunded_status_id',
       'payment_coingate_total', 'payment_coingate_geo_zone_id', 'payment_coingate_receive_currency', 'payment_coingate_test_mode');
@@ -59,9 +59,16 @@ class ControllerExtensionPaymentCoingate extends Controller {
   		}
     }
 
+    $data['payment_coingate_sort_order'] = isset($this->request->post['payment_coingate_sort_order']) ?
+            $this->request->post['payment_coingate_sort_order'] :  $this->config->get('payment_coingate_sort_order');
+
+
+    if (empty($data['payment_coingate_api_auth_token']) && !empty($data['payment_coingate_api_secret']))
+        $data['payment_coingate_api_auth_token'] = $data['payment_coingate_api_secret'];
+
     $data['header'] = $this->load->controller('common/header');
-		$data['column_left'] = $this->load->controller('common/column_left');
-		$data['footer'] = $this->load->controller('common/footer');
+    $data['column_left'] = $this->load->controller('common/column_left');
+    $data['footer'] = $this->load->controller('common/footer');
 
     $this->response->setOutput($this->load->view('extension/payment/coingate', $data));
   }
@@ -78,9 +85,7 @@ class ControllerExtensionPaymentCoingate extends Controller {
     if (!$this->error) {
       $testConnection = \CoinGate\CoinGate::testConnection(array(
         'environment'   => $this->request->post['payment_coingate_test_mode'] == 1 ? 'sandbox' : 'live',
-        'app_id'        => $this->request->post['payment_coingate_app_id'],
-        'api_key'       => $this->request->post['payment_coingate_api_key'],
-        'api_secret'    => $this->request->post['payment_coingate_api_secret']));
+        'auth_token'    => $this->request->post['payment_coingate_api_auth_token']));
 
       if ($testConnection !== true) {
         $this->error['warning'] = $testConnection;
@@ -92,7 +97,8 @@ class ControllerExtensionPaymentCoingate extends Controller {
 
 
 	public function install() {
-		$this->load->model('extension/payment/coingate');
+    $this->load->model('extension/payment/coingate');
+    
 
 		$this->model_extension_payment_coingate->install();
 	}
