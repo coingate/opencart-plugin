@@ -12,6 +12,12 @@ class ModelExtensionPaymentCoingate extends Model {
       ) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;
     ");
 
+    // Modify the currency table to allow 4-character currency code
+    $this->db->query("
+      ALTER TABLE `" . DB_PREFIX . "currency`
+      MODIFY `code` VARCHAR(3) NOT NULL;
+    ");
+
     $this->load->model('setting/setting');
 
     $defaults = array();
