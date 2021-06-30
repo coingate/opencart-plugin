@@ -178,4 +178,9 @@ class ControllerExtensionPaymentCoingate extends Controller
 
     return !$this->error;
   }
+
+  public function install() {
+    $this->load->model('extension/payment/coingate');
+    $this->model_extension_payment_coingate->install();
+  }
 }
