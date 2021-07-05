@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<name>CoinGate</name>
+	<code>coningate</code>
+	<version>3.1.3</version>
+	<author>Ivan</author>
+	<!-- Allow 4 characters in form validation -->
+	<file path="admin/controller/localisation/currency.php">
+		<operation>
+			<search><![CDATA[if (utf8_strlen($this->request->post['code']) != 3)]]></search>
+			<add position="replace"><![CDATA[if (!in_array(utf8_strlen($this->request->post['code']), array(3, 4)))]]></add>
+		</operation>
+	</file>
+</modification>
