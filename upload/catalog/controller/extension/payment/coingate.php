@@ -1,7 +1,7 @@
 <?php
 
-require_once(DIR_SYSTEM . 'library/coingate/coingate-php/init.php');
-require_once(DIR_SYSTEM . 'library/coingate/version.php');
+require_once(DIR_SYSTEM . 'library/vendor/coingate/init.php');
+require_once(DIR_SYSTEM . 'library/vendor/coingate/version.php');
 
 class ControllerExtensionPaymentCoingate extends Controller
 {
@@ -40,7 +40,7 @@ class ControllerExtensionPaymentCoingate extends Controller
             'callback_url' => $this->url->link('extension/payment/coingate/callback', array('cg_token' => $token), true),
             'success_url' => $this->url->link('extension/payment/coingate/success', array('cg_token' => $token), true),
             'title' => $this->config->get('config_meta_title') . ' Order #' . $order_info['order_id'],
-            'description' => join($description, ', '),
+            'description' => join(', ', $description),
             'token' => $token
         ));
 
