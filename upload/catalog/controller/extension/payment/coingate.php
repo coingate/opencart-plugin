@@ -1,5 +1,7 @@
 <?php
 
+use CoinGate\Client;
+
 require_once(DIR_SYSTEM . 'library/coingate/coingate-php/init.php');
 require_once(DIR_SYSTEM . 'library/coingate/version.php');
 
@@ -18,7 +20,7 @@ class ControllerExtensionPaymentCoingate extends Controller
 
     public function checkout()
     {
-        $this->setupCoingateClient();
+        $coingateClient = $this->getCoingateClient();
         $this->load->model('checkout/order');
         $this->load->model('extension/payment/coingate');
 
@@ -31,7 +33,7 @@ class ControllerExtensionPaymentCoingate extends Controller
             $description[] = $product['quantity'] . ' × ' . $product['name'];
         }
 
-        $cg_order = \CoinGate\Merchant\Order::create(array(
+        $params = [
             'order_id' => $order_info['order_id'],
             'price_amount' => number_format($order_info['total'] * $this->currency->getvalue($order_info['currency_code']), 8, '.', ''),
             'price_currency' => $order_info['currency_code'],
@@ -42,7 +44,15 @@ class ControllerExtensionPaymentCoingate extends Controller
             'title' => $this->config->get('config_meta_title') . ' Order #' . $order_info['order_id'],
             'description' => join(', ', $description),
             'token' => $token
-        ));
+        ];
+
+        if ($this->config->get('payment_coingate_prefill_coingate_invoice_email')) {
+            $params['purchaser_email'] = $order_info['email'];
+        }
+
+        Client::setAppInfo('OpenCart', '1.0.0');
+
+        $cg_order = $coingateClient->order->create($params);
 
         if ($cg_order) {
             $this->model_extension_payment_coingate->addOrder(array(
@@ -90,9 +100,9 @@ class ControllerExtensionPaymentCoingate extends Controller
 
 
         if (!empty($order_info) && !empty($ext_order) && strcmp($ext_order['token'], $this->request->get['cg_token']) === 0) {
-            $this->setupCoingateClient();
+            $coingateClient = $this->getCoingateClient();
 
-            $cg_order = \CoinGate\Merchant\Order::find($ext_order['cg_invoice_id']);
+            $cg_order = $coingateClient->order->get($ext_order['cg_invoice_id']);
 
             if ($cg_order) {
                 switch ($cg_order->status) {
@@ -127,12 +137,11 @@ class ControllerExtensionPaymentCoingate extends Controller
         $this->response->addHeader('HTTP/1.1 200 OK');
     }
 
-    private function setupCoingateClient()
+    private function getCoingateClient()
     {
-        \CoinGate\CoinGate::config(array(
-            'environment' => $this->config->get('payment_coingate_test_mode') == 1 ? 'sandbox' : 'live',
-            'auth_token' => empty($this->config->get('payment_coingate_api_auth_token')) ? $this->config->get('payment_coingate_api_secret') : $this->config->get('payment_coingate_api_auth_token'),
-            'user_agent' => 'CoinGate - OpenCart v' . VERSION . ' Extension v' . COINGATE_OPENCART_EXTENSION_VERSION
-        ));
+        return new \CoinGate\Client(
+            empty($this->config->get('payment_coingate_api_auth_token')) ? $this->config->get('payment_coingate_api_secret') : $this->config->get('payment_coingate_api_auth_token'),
+            $this->config->get('payment_coingate_test_mode') == 1
+        );
     }
 }
