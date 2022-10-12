@@ -75,10 +75,10 @@
             <div class="col-sm-10">
               <select name="payment_coingate_receive_currency" id="input-receive-currency" class="form-control">
                 {% for currency in receive_currencies %}
-                {% if currency == payment_coingate_receive_currency %}
-                <option value="{{ currency }}" selected="selected">{{ currency }}</option>
+                {% if currency.symbol == payment_coingate_receive_currency %}
+                <option value="{{ currency.symbol }}" selected="selected">{{ currency.title }}</option>
                 {% else %}
-                <option value="{{ currency }}">{{ currency }}</option>
+                <option value="{{ currency.symbol }}">{{ currency.title }}</option>
                 {% endif %}
                 {% endfor %}
               </select>

@@ -151,9 +151,17 @@ class ControllerExtensionPaymentCoingate extends Controller
         $currencies = $client->getMerchantPayoutCurrencies();
 
         $currencies = array_map(function ($currency) {
-            return $currency['symbol'];
+            return [
+                'symbol' => $currency['symbol'],
+                'title' => $currency['title'],
+            ];
         }, (array)$currencies);
 
-        return array_merge($currencies, ['DO_NOT_CONVERT']);
+        $currencies[] = [
+            'symbol' => 'DO_NOT_CONVERT',
+            'title' => $this->language->get('select_do_not_convert')
+        ];
+
+        return $currencies;
     }
 }
