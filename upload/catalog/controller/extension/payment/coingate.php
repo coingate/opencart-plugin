@@ -50,8 +50,6 @@ class ControllerExtensionPaymentCoingate extends Controller
             $params['purchaser_email'] = $order_info['email'];
         }
 
-        Client::setAppInfo('OpenCart', '1.0.0');
-
         $cg_order = $coingateClient->order->create($params);
 
         if ($cg_order) {
@@ -139,7 +137,9 @@ class ControllerExtensionPaymentCoingate extends Controller
 
     private function getCoingateClient()
     {
-        return new \CoinGate\Client(
+        Client::setAppInfo('OpenCart', COINGATE_OPENCART_EXTENSION_VERSION);
+
+        return new Client(
             empty($this->config->get('payment_coingate_api_auth_token')) ? $this->config->get('payment_coingate_api_secret') : $this->config->get('payment_coingate_api_auth_token'),
             $this->config->get('payment_coingate_test_mode') == 1
         );

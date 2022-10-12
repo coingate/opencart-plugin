@@ -1,5 +1,7 @@
 <?php
 
+use CoinGate\Client;
+
 require_once(DIR_SYSTEM . 'library/coingate/coingate-php/init.php');
 
 class ControllerExtensionPaymentCoingate extends Controller
@@ -110,7 +112,7 @@ class ControllerExtensionPaymentCoingate extends Controller
 
         if (!$this->error) {
             try {
-                \CoinGate\Client::setAppInfo('OpenCart', '1.0.0');
+                Client::setAppInfo('OpenCart', COINGATE_OPENCART_EXTENSION_VERSION);
 
                 $testConnection = \CoinGate\Client::testConnection(
                     $this->request->post['payment_coingate_api_auth_token'],
