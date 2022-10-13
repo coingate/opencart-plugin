@@ -26,4 +26,4 @@ Also note, that *Receive Currency* parameter in your module configuration window
 
 ### For OpenCart 1.* and 2.*
 
-Versions 1.* and 2.* are no longer supported, last release that suppots these versions can he found [here] (https://github.com/coingate/opencart-plugin/releases/tag/v3.1.3)
+Versions 1.* and 2.* are no longer supported, last release that suppots these versions can he found [here](https://github.com/coingate/opencart-plugin/releases/tag/v3.1.3)
